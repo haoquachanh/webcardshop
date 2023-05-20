@@ -1,0 +1,78 @@
+GET http://localhost:3001/
+
+###HOME
+##
+GET http://localhost:3001/api/v1/client/home/slides
+{
+    "link":""
+}
+
+##
+GET http://localhost:3001/api/v1/client/home/trendingList
+
+{
+    "rank":"",
+    "name":"",
+    "image":"",
+    "material":"",
+    "effect":"",
+    "size":""
+}
+
+##
+GET http://localhost:3001/api/v1/client/home/productList
+
+{
+    "product_id":"",
+    "name":"",
+    "image":"",
+    "unit_price":"",
+    "love":"",
+}
+
+
+###Account
+##
+GET http://localhost:3001/api/v1/client/account?id=?
+
+###
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin112@gmail.com",
+    "password": "password"
+}
+
+
+###
+GET http://localhost:3001/api/v1/user/
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImVtYWlsIjoiYWRtaW4xMTJAZ21haWwuY29tIiwiaWF0IjoxNjg0Mjc1NDc0LCJleHAiOjE2ODQyNzY0NzR9.YYWS1qRAKzn8D1vHxPNVN19N5M1PY5Qlbw4jcZ16Ts8
+#copy cái token nhận đc khi đăng nhập mà bỏ dô :>
+
+
+###Order Information
+POST http://localhost:3001/api/v1/client/orderInfor
+
+###Cart Information
+POST http://localhost:3001/api/v1/client/CartInfor
+
+###
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "email": "admin1@gmail.com",
+    "password": "password",
+    "phone": "0123",
+    "birth": "2019-11-11",
+    "name": "vynmm"
+}
+
+###
+GET http://localhost:3001/api/v1/product/all
+
+###
+###
+###
+

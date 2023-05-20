@@ -1,0 +1,106 @@
+@import './config/variables.scss';
+
+
+.footer {
+  // position:relative;
+  // position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-color;
+  padding: 1.5em 0;
+  width: 100%;
+  
+  
+  .footer__logo {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    div{
+      padding: 0 .5rem;
+      img {
+        max-width: 80px;
+      }
+      h1{
+        font-size: 2rem;
+        color: $white-color;
+      }
+    }
+    
+  }
+
+  hr{
+    width: 80%;
+    color: $white-color;
+    border-radius: 12px;
+    margin-top:1.2em; 
+  }
+
+  .infoNlink {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;    
+    align-items: flex-start;
+    width: 80%;
+    div {
+      display: flex;
+      flex-direction: column ;
+      width: 23%;
+      h3 {
+        margin-top: 1em;
+        font-size: 1.3rem;
+        color: $secondary-color;
+      }
+      
+      ul {
+        display: flex;
+        flex-direction: column;
+        
+        width: 100%;
+        list-style-type: none;
+        margin-top: 0.5em;
+        li {
+          display: flex;
+          width: 100%;
+          color: $secondary-color;
+          font-size: 1rem;
+          a {
+            width: 15%;
+            font-size: 1rem;
+            color: $secondary-color;
+            text-decoration: none;           
+            &:hover {
+              color: $tertiary-color;
+            }
+          }
+        }
+        .icon{
+          font-size: 1.2rem;
+        }
+      }
+      .contactIcon{
+        flex-direction: row;
+      }     
+      p {
+        font-size: .6rem;
+        color: $secondary-color;
+      }
+    }
+  }
+
+  @include media-query(sm){
+    .infoNlink {
+      flex-wrap: wrap;
+      justify-content: center;
+      div{
+        width: 40%;
+      }
+      
+      }
+  }
+}

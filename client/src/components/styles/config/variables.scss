@@ -1,0 +1,49 @@
+/* Colors */
+
+$primary-color: #484848;        // blue
+$secondary-color2: #F9F9F9;
+$secondary-color: #F1F1F1;      // gray
+$primary-color2:#E7E7E7;
+$tertiary-color: #9caa9e;
+$logotext: #9C77CB;
+
+$success-color: #28a745;        // green
+$danger-color: #dc3545;         // red
+$info-color: #17a2b8;           // teal
+$warning-color: #ffc107;        // yellow
+$light-color: #f8f9fa;          // light gray
+$dark-color: #343a40;           // dark gray
+$white-color: #ffffff;          // white
+$black-color: #000000;          // black
+$gray-color: #433f3f;
+$light-gray-color: #929090;
+
+/* Fonts */
+
+$font-family: 'Dosis', sans-serif;
+$font-size-base: 1rem;
+
+/* Spacing */
+
+$spacing-unit: 1rem;
+
+
+// Media query mixin
+// Define breakpoints
+$breakpoints: (
+  sm: 671px,
+  md: 1024px,
+  lg: 2024px
+);
+
+@mixin media-query($breakpoint) {
+    @if $breakpoint == sm {
+      @media (max-width: map-get($breakpoints, sm)) { @content; }
+    }
+    @else if $breakpoint == md {
+      @media (max-width: map-get($breakpoints, md)) { @content; }
+    }
+    @else if $breakpoint == lg {
+      @media (max-width: map-get($breakpoints, lg)) { @content; }
+    }
+  }

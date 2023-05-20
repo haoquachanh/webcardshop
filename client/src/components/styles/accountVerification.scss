@@ -1,0 +1,65 @@
+.main-content-av{
+    width: 60%;
+    background-color: #D9D9D9;
+    padding: 2%;
+    margin: 2% 20%;
+    @media (max-width:1025px) {
+        width: 90%;
+        margin: 2% 5%;
+    
+    }
+    p{
+        font-weight: 600;
+        font-size: large;
+        margin-bottom: 0.5%;
+    }
+    .remain-time-code{
+        display: flex;
+        flex-wrap: wrap;
+        p{
+            margin-left: 5px;
+        }
+    }
+    .verify-zone{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        // height: 2em;
+        flex-wrap: wrap;
+        gap: 2%;
+        .code-input{
+            width: 60%;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: large;
+            padding: 1% 2%;
+            @media (max-width:671px) {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        .verify-acc-btns{
+            display: flex;
+            gap: 5%;
+            width: 38%;
+            @media (max-width:671px) {
+                width: 100%;
+                // margin-bottom: 10px;
+            }
+            .verify-btn{
+                width: 50%;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: large;
+            }
+    
+            .resend-code-btn{
+                width: 45%;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: large;
+            }
+        }
+    }
+}

@@ -1,0 +1,167 @@
+
+
+.manager-container{
+    height: 100%;
+    width: 100%;
+    // padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    background: rgb(108,47,144);
+    background: linear-gradient(90deg, rgba(108,47,144,1) 0%, rgba(180,119,230,1) 100%);
+    .side-menu{
+        position: sticky;
+        top: 0;
+        background: rgb(108,47,159);
+        background: linear-gradient(180deg, rgba(108,47,159,1) 11%, rgba(141,94,251,1) 89%);
+        width: 15%;
+        display: flex;
+        //flex-direction: column;
+        justify-content: center;
+        height: 100vh;
+        box-shadow: 1px 1px 2px #3a154f;
+
+        .side-menu-content{
+
+            .title-page{
+                font-size: 2.1em;
+                font-weight: 1000;
+            }
+
+            .admin-brief-box{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .admin-avt{
+                    img{
+                        border-radius: 50%;
+                    }
+                }
+
+                .admin-name{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    .name{
+                        font-size: 1.5em;
+                        font-weight: 700;
+                    }
+                    .position{
+                        font-size: 1em;
+                        font-weight: 500;
+                    }
+                }
+
+            }
+            
+            .menus{
+                .menu-component{
+                    .menu-title{
+                        font-size: 1.1em;
+                        font-weight: 600;
+                    }
+                    .options{
+                        width: fit-content;
+                        margin: 0.5em 0em 2em 0em;
+                        #management-option{
+                            list-style-type: none;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            font-size: 1.1em;
+                            font-weight: 600;
+                            padding: 0.3em 0.5em;
+                            border-radius: 10px;
+                            transition: all 0.2s ease-in;
+                            svg{
+                                margin-right: 0.5em;
+                                font-size: 1.2em;
+                            }
+
+                            &:hover{
+                                background-color: #E6C48E;
+                                color: #6C2F9F;
+                                box-shadow: 0em 0.2em 0.5em #4b0c79;
+                                border-bottom: solid 0.1em white;
+                                padding: 0.5em 0.5em;
+                            }
+
+                            &:active{
+                                background-color: #489967;
+                                color: white;
+                                box-shadow: inset 0em 0.1em 0.5em #4b0c79;
+                                border: none;
+                                padding: 0.5em 0.5em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+
+    .management-contents{
+    position: relative;
+        width: 85%;
+        .admin-header{
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            background-color: #6C2F9F;
+            padding: 5px 10px;
+            gap: 10px;
+            box-shadow: 0px 2px 2px #3a154f;
+            .anouncements{
+                svg{
+                    font-size: 1.4em;
+                    
+                }
+            }
+            .account{
+                svg{
+                    font-size: 1.4em;
+                }
+            }
+        }
+        .content-title{
+            
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            .title-brief{
+                padding: 0 5px;
+                .title{
+                    font-size: 1.7em;
+                    font-weight: 800;
+                }
+                .brief{
+                    font-size: 1.2em;
+                    font-weight: 500;
+
+                }
+            }
+            .download-report-btn{
+                margin-top: auto;
+                padding-right: 10px;
+                button{
+                    padding: 0.2em 0.4em;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.1em;
+                    font-weight: 700;
+                    svg{
+                        font-size: 1.2em;
+                        margin-left: 0.2em;
+                    }
+                }
+            }
+        }
+        .data-table{
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,74 @@
+.main-contact{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    text-decoration: none;
+    height: 100%;
+    padding: 4rem;
+    // background-color: rgb(109, 212, 212);
+    .verhiclebar{
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        height: 100%;
+        
+        padding: 1rem 0 1rem 3.5rem;
+        // display: flex;
+        // position: relative;
+        width: 20%;
+        
+        button{
+            width: 100%;
+            padding: 5px;
+        }
+    }
+    .content{
+        width: 50%;
+        height: 100%;
+        // background-color: antiquewhite;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        background-color: antiquewhite;
+
+        .title{
+            width: 100%;
+            margin: 2rem;
+        }
+        .info{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            // margin: ;
+            .avt{
+                width: 100%;
+            }
+            .detail-info{
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                // justify-content: center;
+                .line {
+                    width: 100%;
+                    padding: 2%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    .name{
+                        width: 150px;
+                    }
+                    .data{
+                        width: 200px;
+                    }
+                    // display: inline-block;
+
+                }
+            }
+        }
+
+    }
+}
