@@ -5,9 +5,6 @@ import joi from 'joi'
 
 export const register = async (req, res) => {
     try {
-        // console.log(joi.object({ email, password }))
-        const { error } = joi.object({ email, password, phone, name, birth }).validate(req.body)
-        if (error) return badRequest(error.details[0]?.message, res)
         console.log(req.body)
         const response = await Services.register(req.body)
         return res.status(200).json(response)

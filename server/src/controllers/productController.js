@@ -2,11 +2,13 @@ import * as Services from "../services/productService"
 import { interalServerError, badRequest } from "../middlewares/handle_errors"
 import { title, image, category_code, price, available, bid, bids, filename, description } from "../helpers/joi_schema"
 import joi from 'joi'
+import { response } from "express";
 const cloudinary = require('cloudinary').v2;
 
-export const getProducts = async (req, res) => {
+
+export const getAllProducts = async (req, res) => {
     try {
-        const response = await Services.getProducts(req.query)
+        const response = await Services.getAllProducts()
         return res.status(200).json(response)
 
     } catch (error) {
@@ -14,104 +16,87 @@ export const getProducts = async (req, res) => {
     }
 }
 
-export const getAllProducts = () => new Promise(async (resolve, reject) => {
+export const getOneProduct = async (req, res) => {
     try {
-        const products = await db.Product.findAll({
-            include: [
-                { model: db.Size, as: 'size' },
-                { model: db.Type, as: 'type' },
-                { model: db.Material, as: 'material' },
-                { model: db.Comment, as: 'comments' },
-                { model: db.OrderItem, as: 'orderItems' },
-                
-            ]
-        });
-
-        resolve({
-            err: 0,
-            products
-        });
+      const productId = req.query.productId;
+      const response = await Services.getOneProduct(productId);
+      
+      if (response.err === 0) {
+        return res.status(200).json(response);
+      } else {
+        return res.status(404).json({ err: 1, mes: 'Product not found' });
+      }
     } catch (error) {
-        reject(error);
+      return res.status(500).json({ err:-1, mes: 'Internal Server Error' });
     }
-});
-
-
-export const getOneProduct = (productId) => new Promise(async (resolve, reject) => {
-    try {
-        const product = await db.Product.findByPk(productId, {
-            include: [
-                { model: db.Size, as: 'size' },
-                { model: db.Type, as: 'type' },
-                { model: db.Material, as: 'material' },
-                { model: db.Comment, as: 'comments' },
-                { model: db.OrderItem, as: 'orderItems' }
-            ]
-        });
-
-        if (product) {
-            resolve({
-                err: 0,
-                product
-            });
-        } else {
-            resolve({
-                err: 1,
-                mes: 'Product not found'
-            });
-        }
-    } catch (error) {
-        reject(error);
-    }
-});
-
-
-
-
-
-// CREATE
+  };
+  
 export const createNewProduct = async (req, res) => {
     try {
-        const fileData = req.file
-        const { error } = joi.object({ image }).validate({ ...req.body, image: fileData?.path })
-        if (error) {
-            if (fileData) cloudinary.uploader.destroy(fileData.filename)
-            return badRequest(error.details[0].message, res)
-        }
-        const response = await Services.createNewProduct(req.body, fileData)
+      const fileData = req.file, image= fileData?.path
+
+      // Create a new product object
+      const productData = {...req.body, imgMain: image};
+
+      const response = await Services.createNewProduct(productData,fileData);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+export const updateOneProduct = async (req, res) => {
+  try {
+      const response = await Services.updateOneProduct(req.query?.productId,req.body)
+      return res.status(200).json(response)
+
+  } catch (error) {
+      return interalServerError(res)
+  }
+}
+
+export const deleteOneProduct = async (req, res) => {
+    try {
+        const response = await Services.deleteOneProduct(req.query?.productId)
         return res.status(200).json(response)
 
     } catch (error) {
         return interalServerError(res)
     }
 }
-// UPDATE
-export const updateProduct = async (req, res) => {
-    try {
-        const fileData = req.file
-        const { error } = joi.object({ bid }).validate({ bid: req.body.bid })
-        if (error) {
-            if (fileData) cloudinary.uploader.destroy(fileData.filename)
-            return badRequest(error.details[0].message, res)
-        }
-        const response = await Services.updateProduct(req.body, fileData)
-        return res.status(200).json(response)
 
-    } catch (error) {
-        return interalServerError(res)
+export const uploadImages=async (req,res)=>{
+  try {
+    
+    // console.log(req)
+    const images = req.files;
+    let path = images.map(obj=>obj?.path)
+    let img = path.join(';'); // Use ';' as the separator
+
+    // Cắt ảnh thành mảng
+    // let path2 = urlString.split(';');
+
+
+    if (img && req.query?.productId)
+      {
+        const response= await Services.updateOneProduct(req.query?.productId,{img:img})
+        return res.status(200).json(response)
+      }
+    return {
+      err:1,
+      mes:"Upload images failed"
     }
+    
+  } catch (error) {
+    return interalServerError(res)
+  }
 }
-// DELETE
-export const deleteProduct = async (req, res) => {
-    try {
-        const { error } = joi.object({ productId, filename }).validate(req.query)
-        if (error) {
-            return badRequest(error.details[0].message, res)
-        }
-        const response = await Services.deleteProduct(req.query.bids, req.query.filename)
-        return res.status(200).json(response)
 
-    } catch (error) {
-        return interalServerError(res)
-    }
+export const getQuestions=async(req, res) => {
+  try {
+    let response= await Services.getQuestions(req.query?.productId)
+    return res.status(200).json(response)
+  } catch (err) {
+    return interalServerError(res)   
+  }
 }

@@ -1,914 +1,463 @@
-import React, {useState,useEffect,useCallback}  from 'react';
-import { Link } from 'react-router-dom';
-import Popup from 'reactjs-popup';
+import React, {useState, useEffect}  from 'react';
+// import { Link } from 'react-router-dom';
+// import Popup from 'reactjs-popup';
 import '../styles/config/content.scss'
 import '../styles/product.scss';
-import Dropzone from 'react-dropzone'
-import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../store/actions'
+// import Dropzone from 'react-dropzone'
+// import { useDispatch, useSelector } from 'react-redux';
+// import * as actions from '../../store/actions'
 
 //import icon
-import {BsFileXFill,BsBookmarkHeart,BsBookmarkHeartFill,BsEyeFill} from 'react-icons/bs';
-import {RiZoomInLine,RiZoomOutLine} from 'react-icons/ri';
-import {TbResize, TbFlipVertical, TbFlipHorizontal} from 'react-icons/tb';
-import {MdRotate90DegreesCw} from 'react-icons/md';
-import {FaRegHandPaper,FaListAlt,FaTrashAlt} from 'react-icons/fa'
-import {IoIosArrowForward} from 'react-icons/io';
-import {AiOutlineCheckCircle,AiFillCheckCircle} from 'react-icons/ai'
+
+// import {FaListAlt} from 'react-icons/fa'
+import ProductPreview from '../components-render/ProductPreview';
+import BasicParamsRender from '../components-render/BasicParamsRender';
+import ProductOptionRender from '../components-render/ProductOptionRender';
+import ProductIntroduce from '../components-render/ProductIntroduce';
+import PrintAre from '../components-render/PrintingArea';
+import Question from '../components-render/Questions';
+import RelationProduct from '../components-render/RelationProduct';
+// import OrderInfor from '../components-render/OrderInfor';
+import { products } from '../models/data';
 
 /**
  * Product information 
  */
-const productId=["Cardbogoc","PostCard","Photostrip","Photobook","Frames","NoteBook","Sticker","Poster"]
 
-const PRODUCT_INFOR={
-  Cardbogoc:{  
-    name:"Card bo góc",
-    material:[
-      ["Card Giấy C300", "bóng", "mờ", "Hologram", "kim tuyến"],
-      ["Card Cứng 4k", "bóng", "lụa", "Hologram", "kim tuyến"],
-      ["Card Nhựa PVC", "bóng","nhám", "Hologram", "kim tuyến"],
-      ["Card Polar"],
-      ["Card Lenti"]
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]       
-  },
-  PostCard:{
-    name: "Post Card",
-    material:[
-      ["Post Card Giấy C300" ,"bóng", "mờ", "Hologram", "kim tuyến"],
-      ["Post card Lenti"]
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]  
-  },
-  Photostrip:{
-    name: "Photostrip",
-    material:[
-      ["Photostrip giấy C300" ,"bóng", "mờ", "Hologram", "kim tuyến"],
-    ],  
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]  
-  },
-  Photobook:{
-    name: "Photobook (Sách Ảnh)",
-    material:[
-      ["Sách ảnh bìa cứng"],
-      ["Sách ảnh bìa mềm"]
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]     
-  },
-  Frames:{
-    name:"Khung ảnh để bàn vs Treo Tường",
-    material:[],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]    
-  },
-  Calenders:{
-    name:"Lịch Để bàn",
-    material:[],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]   
-  }, 
-  NoteBook:{
-    name: "Sổ Tay ,note book (In theo yêu cầu)",
-    material:[
-      ["Sổ tay"],
-      ["Note book"]
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]  
-  },
-  Sticker:{
-    name:"Sticker", 
-    material:[
-     ["Bế Demi","bóng", "mờ", "Hologram", "kim tuyến"],
-     ["Cắt rời","bóng", "mờ", "Hologram", "kim tuyến"] 
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]    
-  },
-  Poster:{
-    name:"Poster",
-    material: [
-      ["A3","bóng", "mờ", "kim tuyến"]
-      ["A2","bóng", "mờ", "kim tuyến"]
-    ],
-    size:[
-      "13x18cm",
-      "20x30cm",
-      "30x40cm",
-      "40x 60cm",
-      "60x90cm"
-    ]     
-  }
-}
 
 /** Upload images from device by clicking button or drag them into area 
  *  This function is called in ClickHereToUpLoadImage
  *  A array name "files" that save image paths
 */
 
-/**  Open a popup that allow upload images from device */
-function ClickHereToUpLoadImage({_files,_handleSetFiles}){
 
-  const [files, setFiles] = useState([]);
+const productInfor={
+  description:{
+    title:"Card bo góc là gì?",
+    content:"Thẻ nhựa hay còn gọi là PVC là loại thẻ được làm từ nhựa, rất được ưa chuộng vì tính tiện dụng, độ bền cao và giá thành rẻ. Ngày nay, thay vì dùng thẻ giấy với giá in khá đắt nhưng không bền, người ta thường chuyển từ in thẻ giấy sang in thẻ nhựa để sử dụng thuận tiện hơn. /br/ Thẻ nhựa hay còn gọi là PVC là loại thẻ được làm từ nhựa, rất được ưa chuộng vì tính tiện dụng, độ bền cao và giá thành rẻ. Ngày nay, thay vì dùng thẻ giấy với giá in khá đắt nhưng không bền, người ta thường chuyển từ in thẻ giấy sang in thẻ nhựa để sử dụng thuận tiện hơn.",
+  },
 
-  const onDrop = (acceptedFiles) => {
-    setFiles([...files, ...acceptedFiles]);
-  }
-
-  const clearSrc =()=>{
-    while (files.length!==0) {
-      
-      files.pop()
-    }
-  }
-
-  const getfiles=()=>{
-    const updatedFiles = files.map((file, index) => {
-      if (index===0) {
-        return {
-          ...file,
-          index: index,
-          url: URL.createObjectURL(files[index]),
-          quantity: 1,
-          accessState: false
-        }
-      } else {
-        return {
-          ...file,
-          index: index,
-          url: URL.createObjectURL(files[index]),
-          quantity: 1,
-          accessState: false
-        }
+  option_des:{
+    material_des : [
+      {
+        title: "Card Giấy C300",
+        content: "Đây là loại thẻ được làm từ chất liệu giấy C300. Thẻ giấy C300 có độ bền tương đối và giá thành phải chăng./br//br/Ưu điểm:/br/- Giá thành phải chăng, phù hợp cho thẻ tạm thời, dễ tái chế./br//br/Nhược điểm:/br/- Không chống nước, độ bền không cao bằng các loại thẻ nhựa khác.",
+        img: "https://via.placeholder.com/700x300##https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Card Cứng 4k",
+        content: "Thẻ Card Cứng 4k là loại thẻ có độ cứng cao và chất lượng in ấn tốt. Thẻ này thường được sử dụng trong các thẻ thành viên, thẻ VIP, thẻ thư viện, v.v./br//br/Ưu điểm:/br/- Độ cứng cao, chất lượng in ấn tốt, chống nước, lâu phai màu./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ giấy, không dễ tái chế.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Card Nhựa PVC",
+        content: "Card Nhựa PVC là loại thẻ được làm từ chất liệu nhựa PVC cao cấp. Thẻ này có độ bền cao, chống nước và chất lượng in ấn sắc nét./br//br/Ưu điểm:/br/- Độ bền cao, chống nước, chất lượng in ấn sắc nét./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ giấy, không dễ tái chế.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Card Polar",
+        content: "Card Polar là loại thẻ có lớp phủ bề mặt bóng mờ. Thẻ này mang lại vẻ sang trọng và chuyên nghiệp cho các loại thẻ cao cấp./br//br/Ưu điểm:/br/- Vẻ sang trọng, chuyên nghiệp, thu hút sự chú ý./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ thông thường, không dễ tái chế.",
+        img: "https://via.placeholder.com/700x300##https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Card Lenti",
+        content: "Card Lenti là loại thẻ có lớp phủ bề mặt nhám, tạo cảm giác chống trượt và chống trầy xước./br//br/Ưu điểm:/br/- Chống trượt, chống trầy xước, bền bỉ./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ thông thường, không dễ tái chế.",
+        img: "https://via.placeholder.com/700x300"
       }
-
-    });
-    _files.pop();
-    _handleSetFiles([..._files,...updatedFiles]);
-  }
-
-  return(
-    <div className='uploading-popup'>              
-      <Popup trigger=
-          {<button className='open-popup-btn'> Chọn ảnh từ máy </button>}
-          modal nested>
-          {
-            close => (
-              // <div className='test'>
-                <div className='modal'>
-                  <div className='modal-header'>
-                  {files.length ===0 &&
-                    <p className='drag-them-here'>Kéo ảnh vào đây:</p>
-                  }
-
-                  {
-                    files.length!==0&&
-                    <p className='drag-them-here'>Bạn đã tải lên {files.length} ảnh</p>
-                  }
-                    <div className='modal-btns'>
-                      <button className='reselect-btn' onClick=
-                        {() => {
-                          close();
-                          clearSrc();
-                        }}>
-                        <div className='reselect-text'>
-                            Hủy
-                        </div>
-                        <BsFileXFill className='reselect-icon'/>
-                      </button>
-
-                      <button className='confirm-upload-btn' onClick=
-                        {() => {
-                          close();
-                          getfiles();
-                        }} disabled={files.length>0?false:true}>
-                        <div className='confirm-upload-text' disabled={true}>
-                          OK 
-                        </div>
-                    
-                      </button>
-                    </div>
-                  </div>
-                    <div className='upload-img-box'>
-                      <div className='drag-and-drop-zone'>
-                        {files.length ===0 &&
-                          <>
-                            {/* <p className='drag-them-here'>Kéo ảnh vào đây:</p> */}
-                            <Dropzone onDrop={onDrop}>
-                              {({getRootProps, getInputProps}) => (
-                                <div className='get-input' {...getRootProps()}>
-                                  <input {...getInputProps()} />            
-                                  <button className='from-device-btn'>Chọn từ thiết bị</button>
-                                </div>
-                              )}
-                            </Dropzone>
-                          </>      
-                        }
-                        {files.length !==0 &&
-                          <>
-                            
-                            <div className='display-upload-imgs-box'>
-                              
-                              {files.map((file) => (
-                                  <div className="uploaded-imgs" key={file.name}>
-                                    <img className='uploaded-img-src' src={URL.createObjectURL(file)} alt={file.name} />
-                                    <p className='uploaded-imgs-name'>{file.name}</p>
-                                  </div>
-                              ))}
-
-                            </div>
-                          </>
-                        }
-                        
-                      </div>
-                    </div>
-                </div>
-              // </div>
-            )
-          }
-      </Popup>
-    </div>
-  );
-};
-
-function ImageEditor({_orderData,_productId,_files, _handleUpdateFile, _handleDeleteFiles, _handleDeleteFilesAccessed, _handleSendOrderInfor}){
-
-  const { isLoggedIn} = useSelector(state => state.auth)
-  const dispatch= useDispatch()
-
-  const handleSetCart =async()=>{
-    dispatch(actions.set_cart(_orderData))
+    ],
+    
+    effect_des : [
+      {
+        title: "Bóng",
+        content: "Hiệu ứng bóng tạo cho thẻ một vẻ ngoài sáng bóng và bắt mắt. /br/ Thẻ với hiệu ứng bóng thường được sử dụng trong thẻ VIP, thẻ thành viên, thẻ quà tặng, v.v.",
+        img: "https://via.placeholder.com/700x300##https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Mờ",
+        content: "Hiệu ứng mờ tạo cho thẻ một vẻ ngoài mịn màng và tinh tế. /br/ Thẻ với hiệu ứng mờ thường được sử dụng trong thẻ công ty, thẻ nhân viên, thẻ tạm thời, v.v.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Hologram",
+        content: "Hiệu ứng hologram tạo cho thẻ một vẻ ngoài lấp lánh và độc đáo. /br/ Thẻ với hiệu ứng hologram thường được sử dụng trong thẻ an ninh, thẻ giảm giá, thẻ thành viên cao cấp, v.v.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Kim tuyến",
+        content: "Hiệu ứng kim tuyến tạo cho thẻ một vẻ ngoài lấp lánh và sang trọng. /br/ Thẻ với hiệu ứng kim tuyến thường được sử dụng trong thẻ quà tặng, thẻ lễ kỷ niệm, thẻ chúc mừng, v.v.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Lụa",
+        content: "Hiệu ứng lụa tạo cho thẻ một vẻ ngoài mềm mại và sang trọng. /br/ Thẻ với hiệu ứng lụa thường được sử dụng trong thẻ VIP, thẻ danh tiếng, thẻ nhân viên cao cấp, v.v.",
+        img: "https://via.placeholder.com/700x300"
+      },
+      {
+        title: "Nhám",
+        content: "Hiệu ứng nhám tạo cho thẻ một vẻ ngoài chất liệu tự nhiên và độc đáo. /br/ Thẻ với hiệu ứng nhám thường được sử dụng trong thẻ thư viện, thẻ thông tin, thẻ tạm thời, v.v.",
+        img: "https://via.placeholder.com/700x300"
+      }
+    ]
+  },
+  order_notify :[
+    {
+      title: "Quy trình đặt hàng",
+      content: "",
+      img:'../img/thegioiinan-quytrinh.png'
+    },
+    {
+      title: "Thông tin về sản phẩm và file in",
+      content:
+        "TGIA khuyến khích sử dụng hệ màu CMYK để thiết kế./br/Thành phẩm sẽ có dung sai ±1 mm nên TGIA khuyến khích anh chị thiết kế viền lớn hơn 3mm và khi thành phẩm sẽ có sự chênh lệch giữa các cạnh ±1 mm./br/TGIA chấp nhận file thiết kế xuất từ các phần mềm Adobe Illustrator (Ai), Photoshop (Psd), Indesign (Indd) và Corel (Cdr), xem thêm hướng dẫn xuất file tại đây./br/Các định dạng file có đuôi: psd, tiff, jpg, png… phải đạt độ phân giải 300dpi đối với hình ảnh và 400dpi đối với text./br/Đối với in offset, nếu file của anh chị có nền in màu đen, hãy chỉnh màu C: 20 M: 20 Y: 0 K: 100, nếu file của anh chị có chữ đen, hãy chỉnh màu C: 20 M: 0 Y: 0, K: 100./br/Đối với in kỹ thuật số, nếu file của anh chị có nền in màu đen, hãy chỉnh màu C: 20 M: 0 Y: 0 K: 100",
+      img:'../img/he_mau.jpg'
+     },
+    {
+      title: "Thanh toán & in ấn",
+      content:
+        "Để TGIA tiến hành xử lý đơn hàng, anh chị vui lòng đặt cọc 50% chi phí in ấn và 100% phí thiết kế (nếu anh chị yêu cầu TGIA thiết kế file riêng)./br/Nếu file của anh chị không in ấn được, TGIA sẽ hoàn trả lại số tiền mà anh chị đã đặt cọc./br/Anh chị vui lòng kiểm tra nội dung file in trước khi xác nhận, TGIA có trách nhiệm thực hiện đúng nội dung mà anh chị đã xác nhận./br/Thời gian in ấn sẽ được tính từ khi anh chị xác nhận file in"
+    },
+    {
+      title: "Giao nhận & đổi trả",
+      content:
+        "Thời gian giao hàng sẽ được tính từ khi đơn hàng thành phẩm./br/Đối với anh chị có địa chỉ giao hàng ở ngoài TPHCM, thời gian giao hàng còn phụ thuộc vào đơn vị vận chuyển thứ 3./br/Nếu sản phẩm bị lỗi do kỹ thuật in, sản phẩm không đúng với các yêu cầu khi đặt hàng, Anh chị vui lòng liên hệ với TGIA trong vòng 05 ngày kể từ khi nhận hàng để được hỗ trợ xử lý./br/TGIA có trách nhiệm đổi trả sản phẩm cho anh chị nếu sản phẩm bị lỗi, TGIA không áp dụng quy đổi sản phẩm thành tiền để hoàn trả"
+    }
+  ]
+  
+  
 }
 
-  /* Atribute: name, icon, property, value, range(min,max), unit */
-  const ICONS = {
-    RiZoomOutLine: RiZoomOutLine,
-    RiZoomInLine: RiZoomInLine,
-    TbResize: TbResize,
-    TbFlipVertical: TbFlipVertical,
-    TbFlipHorizontal: TbFlipHorizontal,
-    MdRotate90DegreesCw: MdRotate90DegreesCw,
-    FaRegHandPaper: FaRegHandPaper,
-  };
+const productInforSticker={
+  description:{
+    title:"Card bo góc là gì?",
+    content:"Thẻ nhựa hay còn gọi là PVC là loại thẻ được làm từ nhựa, rất được ưa chuộng vì tính tiện dụng, độ bền cao và giá thành rẻ. Ngày nay, thay vì dùng thẻ giấy với giá in khá đắt nhưng không bền, người ta thường chuyển từ in thẻ giấy sang in thẻ nhựa để sử dụng thuận tiện hơn. /br/ Thẻ nhựa hay còn gọi là PVC là loại thẻ được làm từ nhựa, rất được ưa chuộng vì tính tiện dụng, độ bền cao và giá thành rẻ. Ngày nay, thay vì dùng thẻ giấy với giá in khá đắt nhưng không bền, người ta thường chuyển từ in thẻ giấy sang in thẻ nhựa để sử dụng thuận tiện hơn.",
+  },
 
-  const DEFAULT_TOOLS=[
-    {
-      name: "Zoom out",
-      icon: "RiZoomOutLine",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
+  option_des:{
+    material_des : [
+      {
+        title: "Card Giấy C300",
+        content: "Đây là loại thẻ được làm từ chất liệu giấy C300. Thẻ giấy C300 có độ bền tương đối và giá thành phải chăng./br//br/Ưu điểm:/br/- Giá thành phải chăng, phù hợp cho thẻ tạm thời, dễ tái chế./br//br/Nhược điểm:/br/- Không chống nước, độ bền không cao bằng các loại thẻ nhựa khác.",
+        img: "../img/imgs_preview_banner/pic_11.jpg"
       },
-      unit: "%"
-    },
-
-    {
-      name: "Zoom in",
-      icon: "RiZoomInLine",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
+      {
+        title: "Card Cứng 4k",
+        content: "Thẻ Card Cứng 4k là loại thẻ có độ cứng cao và chất lượng in ấn tốt. Thẻ này thường được sử dụng trong các thẻ thành viên, thẻ VIP, thẻ thư viện, v.v./br//br/Ưu điểm:/br/- Độ cứng cao, chất lượng in ấn tốt, chống nước, lâu phai màu./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ giấy, không dễ tái chế.",
+        img: "../img/imgs_preview_banner/pic_12.jpg"
       },
-      unit: "%"
-    },
-
-    {
-      name: "Resize tool",
-      icon: "TbResize",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
+      {
+        title: "Card Nhựa PVC",
+        content: "Card Nhựa PVC là loại thẻ được làm từ chất liệu nhựa PVC cao cấp. Thẻ này có độ bền cao, chống nước và chất lượng in ấn sắc nét./br//br/Ưu điểm:/br/- Độ bền cao, chống nước, chất lượng in ấn sắc nét./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ giấy, không dễ tái chế.",
+        img: "../img/imgs_preview_banner/pic_13.jpg"
       },
-      unit: "%"
-    },
-
-    {
-      name: "Rotate tool",
-      icon: "MdRotate90DegreesCw",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
+      {
+        title: "Card Polar",
+        content: "Card Polar là loại thẻ có lớp phủ bề mặt bóng mờ. Thẻ này mang lại vẻ sang trọng và chuyên nghiệp cho các loại thẻ cao cấp./br//br/Ưu điểm:/br/- Vẻ sang trọng, chuyên nghiệp, thu hút sự chú ý./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ thông thường, không dễ tái chế.",
+        img: "../img/imgs_preview_banner/pic_14.jpg"
       },
-      unit: "%"
-    },
-
-    {
-      name: "Hand tool",
-      icon: "FaRegHandPaper",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
-      },
-      unit: "%"
-    },
-
-    {
-      name: "Vertical Flip",
-      icon: "TbFlipVertical",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
-      },
-      unit: "%"
-    },
-
-    {
-      name: "Horizontal Flip",
-      icon: "TbFlipHorizontal",
-      property: "",
-      value: 50,
-      range:{
-        min: 0,
-        max: 200,
-      },
-      unit: "%"
-    },
-  ];
-
-  const [changedCheck, setChanged]= useState(false)
-
-  const [tools, setTools] = useState(DEFAULT_TOOLS)
-  const [imgIndex,setIndex] =useState([
-    {
-      prev:0,
-      current:0
-    }
-  ]);
-
-  const [checkMultiChoice,setMultiChoice]= useState(false)
-
-  const handleSetMultiChoice=()=>{
-    if(checkMultiChoice){
-      setMultiChoice(false)
-    }else{
-      setMultiChoice(true)
-    }
-  }
-
-  const [quantityTyping,setQuantity]= useState(0)
-
-  const handleSetQuantity = useCallback((quantity)=>{
-    setQuantity(quantity);
-  }, []);
-
-  useEffect(() => {
-    handleSetQuantity(_files[imgIndex[0].current].quantity)
-  }, [imgIndex, _files, handleSetQuantity]);
-
-  const prevImgIndex=()=>{
-    var temp=imgIndex[0].current;
-
-    const updatedIndex = {
-      ...imgIndex[0],
-      prev: temp,
-      current: temp<1?temp:--temp
-    };
-    setIndex([updatedIndex]);
-    // console.log("current:"+imgIndex[0].current)
-    // console.log("previous:"+ imgIndex[0].prev)
-    handleSetQuantity(_files[imgIndex[0].current].quantity)
-  }
-
-  const nextImgIndex=()=>{
-    var temp=imgIndex[0].current;
-    const updatedIndex = {
-      ...imgIndex[0],
-      prev: temp,
-      current: imgIndex[0].current>=(_files.length-1)?temp:++temp
-    };
-    setIndex([updatedIndex]);
-    // console.log("current:"+imgIndex[0].current)
-    // console.log("previous:"+ imgIndex[0].prev)
-  }
-
-  const setCurrentImg=(index, check)=>{
-    const updatedIndex = {
-      ...imgIndex[0],
-      prev: imgIndex[0].current,
-      current: index
-    };
-    setIndex([updatedIndex]);
-    // console.log("current:"+imgIndex[0].current)
-    // console.log("previous:"+ imgIndex[0].prev)
-    if (check===true) {
-
-      // console.log("accessState: "+_files[imgIndex[0].current].accessState===true)
-      if (_files[index].accessState===true) {
-        _handleUpdateFile(index,'accessState',false)
-        // console.log("set True")
-      } else {
-        _handleUpdateFile(index,'accessState',true)
-        // console.log("set False")
+      {
+        title: "Card Lenti",
+        content: "Card Lenti là loại thẻ có lớp phủ bề mặt nhám, tạo cảm giác chống trượt và chống trầy xước./br//br/Ưu điểm:/br/- Chống trượt, chống trầy xước, bền bỉ./br//br/Nhược điểm:/br/- Giá thành cao hơn các loại thẻ thông thường, không dễ tái chế.",
+        img: "../img/imgs_preview_banner/pic_15.jpg"
       }
-
+    ],
+    
+    effect_des : [
+      {
+        title: "Bóng",
+        content: "Hiệu ứng bóng tạo cho thẻ một vẻ ngoài sáng bóng và bắt mắt. /br/ Thẻ với hiệu ứng bóng thường được sử dụng trong thẻ VIP, thẻ thành viên, thẻ quà tặng, v.v.",
+        img: "../img/imgs_preview_banner/pic_16.jpg"
+      },
+      {
+        title: "Mờ",
+        content: "Hiệu ứng mờ tạo cho thẻ một vẻ ngoài mịn màng và tinh tế. /br/ Thẻ với hiệu ứng mờ thường được sử dụng trong thẻ công ty, thẻ nhân viên, thẻ tạm thời, v.v.",
+        img: "../img/imgs_preview_banner/pic_17.jpg"
+      },
+      {
+        title: "Hologram",
+        content: "Hiệu ứng hologram tạo cho thẻ một vẻ ngoài lấp lánh và độc đáo. /br/ Thẻ với hiệu ứng hologram thường được sử dụng trong thẻ an ninh, thẻ giảm giá, thẻ thành viên cao cấp, v.v.",
+        img: "../img/imgs_preview_banner/pic_18.jpg"
+      },
+      {
+        title: "Kim tuyến",
+        content: "Hiệu ứng kim tuyến tạo cho thẻ một vẻ ngoài lấp lánh và sang trọng. /br/ Thẻ với hiệu ứng kim tuyến thường được sử dụng trong thẻ quà tặng, thẻ lễ kỷ niệm, thẻ chúc mừng, v.v.",
+        img: "../img/imgs_preview_banner/pic_19.jpg"
+      },
+      {
+        title: "Lụa",
+        content: "Hiệu ứng lụa tạo cho thẻ một vẻ ngoài mềm mại và sang trọng. /br/ Thẻ với hiệu ứng lụa thường được sử dụng trong thẻ VIP, thẻ danh tiếng, thẻ nhân viên cao cấp, v.v.",
+        img: "../img/imgs_preview_banner/pic_20.jpg"
+      },
+      {
+        title: "Nhám",
+        content: "Hiệu ứng nhám tạo cho thẻ một vẻ ngoài chất liệu tự nhiên và độc đáo. /br/ Thẻ với hiệu ứng nhám thường được sử dụng trong thẻ thư viện, thẻ thông tin, thẻ tạm thời, v.v.",
+        img: "../img/imgs_preview_banner/pic_21.jpg"
+      }
+    ]
+  },
+  order_notify :[
+    {
+      title: "Quy trình đặt hàng",
+      content: "",
+      img:'../img/thegioiinan-quytrinh.png'
+    },
+    {
+      title: "Thông tin về sản phẩm và file in",
+      content:
+        "TGIA khuyến khích sử dụng hệ màu CMYK để thiết kế./br/Thành phẩm sẽ có dung sai ±1 mm nên TGIA khuyến khích anh chị thiết kế viền lớn hơn 3mm và khi thành phẩm sẽ có sự chênh lệch giữa các cạnh ±1 mm./br/TGIA chấp nhận file thiết kế xuất từ các phần mềm Adobe Illustrator (Ai), Photoshop (Psd), Indesign (Indd) và Corel (Cdr), xem thêm hướng dẫn xuất file tại đây./br/Các định dạng file có đuôi: psd, tiff, jpg, png… phải đạt độ phân giải 300dpi đối với hình ảnh và 400dpi đối với text./br/Đối với in offset, nếu file của anh chị có nền in màu đen, hãy chỉnh màu C: 20 M: 20 Y: 0 K: 100, nếu file của anh chị có chữ đen, hãy chỉnh màu C: 20 M: 0 Y: 0, K: 100./br/Đối với in kỹ thuật số, nếu file của anh chị có nền in màu đen, hãy chỉnh màu C: 20 M: 0 Y: 0 K: 100",
+      img:'../img/he_mau.jpg'
+     },
+    {
+      title: "Thanh toán & in ấn",
+      content:
+        "Để TGIA tiến hành xử lý đơn hàng, anh chị vui lòng đặt cọc 50% chi phí in ấn và 100% phí thiết kế (nếu anh chị yêu cầu TGIA thiết kế file riêng)./br/Nếu file của anh chị không in ấn được, TGIA sẽ hoàn trả lại số tiền mà anh chị đã đặt cọc./br/Anh chị vui lòng kiểm tra nội dung file in trước khi xác nhận, TGIA có trách nhiệm thực hiện đúng nội dung mà anh chị đã xác nhận./br/Thời gian in ấn sẽ được tính từ khi anh chị xác nhận file in"
+    },
+    {
+      title: "Giao nhận & đổi trả",
+      content:
+        "Thời gian giao hàng sẽ được tính từ khi đơn hàng thành phẩm./br/Đối với anh chị có địa chỉ giao hàng ở ngoài TPHCM, thời gian giao hàng còn phụ thuộc vào đơn vị vận chuyển thứ 3./br/Nếu sản phẩm bị lỗi do kỹ thuật in, sản phẩm không đúng với các yêu cầu khi đặt hàng, Anh chị vui lòng liên hệ với TGIA trong vòng 05 ngày kể từ khi nhận hàng để được hỗ trợ xử lý./br/TGIA có trách nhiệm đổi trả sản phẩm cho anh chị nếu sản phẩm bị lỗi, TGIA không áp dụng quy đổi sản phẩm thành tiền để hoàn trả"
     }
-
-  }
-
-  const increaseQuan=()=>{
-    let temp=quantityTyping;
-    setQuantity(++temp);
-    if(temp!==_files[imgIndex[0].current].quantity){
-
-      setChanged(true)
-    }else{
-      setChanged(false)
-    }
-  }
-
-  const decreaseQuan=()=>{
-    let temp=quantityTyping;
-    setQuantity(--temp);
-    if(temp!==_files[imgIndex[0].current].quantity){
-
-      setChanged(true)
-    }else{
-      setChanged(false)
-    }
-  }
+  ]
   
-  const changeQuantity=()=>{
-    setChanged(false)
-    _handleUpdateFile(imgIndex[0].current,'quantity', quantityTyping)
-  }
-  // console.log(imgIndex[0].current+"/n"+imgIndex[0].prev);
-  // console.log(_files.length)
-  function ToolBtn({tool_name, tool_icon}) {
-    const IconComponent = ICONS[tool_icon];
-    return (
-      <button className='tool-btn' disabled>
-        <div className='tool-name'>
-          {tool_name}
-        </div>
-        <IconComponent className="tool-icon"/>
-      </button>
-    );
-  };
+  
+}
 
-  const deleteImage=()=>{
-    if (checkMultiChoice) {
-      const updatedIndex = {
-        ...imgIndex[0],
-        prev: 0,
-        current: 0
-      };
-      setIndex([updatedIndex]);
-      _handleDeleteFilesAccessed();
-      return
-    } else {
-      let tmp=imgIndex[0].current
-      if (_files.length===1) {
-        _handleUpdateFile(0,'index',1);
-        _handleUpdateFile(0,'url',"");
-        _handleUpdateFile(0,'quantity',1);
-        _handleUpdateFile(0,'accessState',false);
-        return
-      }else{
+const productOptions = {
+  ma_ef: [
+    ["Card Giấy C300", "bóng", "mờ", "Hologram", "kim tuyến"],
+    ["Card Cứng 4k", "bóng", "lụa", "Hologram", "kim tuyến"],
+    ["Card Nhựa PVC", "bóng", "nhám", "Hologram", "kim tuyến"],
+    ["Card Polar"],
+    ["Card Lenti"]
+  ],
+  size: [
+    "60x90 mm",
+    "85x55 mm",
+    "54x86mm",
+    "60x60mm",
+    "90x54mm",
+    "50x150mm"
+  ],
+  price: {
+    unlimitedDesigns: [  
+      { quantity: "10", price: "3" },
+      { quantity: "50", price: "2.5" },
+      { quantity: "100", price: "2.2" },
+      { quantity: "300", price: "2" },
+      { quantity: "Trên 500", price: "1.5" },
+    ],
+    limitedDesigns: {
+      limit: "5",
+      price_table:[  
+        { quantity: "100", price: "2" },
+        { quantity: "300", price: "1.5" },
+        { quantity: "Trên 500", price: "1.2" },
+      ], 
+    },
 
-        if(tmp===_files.length-1){
-          --tmp;
-        }
+    extra:[
+      {
+        add:"Cán Hologram:",
+        price: "Thêm 0.5 k/cái"
+      },
+      {
+        add:"Cán Kim tuyến:",
+        price: "Thêm 1 k/cái"
       }
-      setCurrentImg(tmp)
-      _handleDeleteFiles(imgIndex[0].current);
-      // console.log(_files)
-    }
+    ],
+
+
   }
 
-  const setSelected=()=>{
-    if (_files[imgIndex[0].current].accessState===true) {
-      _handleUpdateFile(imgIndex[0].current, 'accessState', false);
-    } else {
-      
-      _handleUpdateFile(imgIndex[0].current, 'accessState', true);
-    }
-  }
 
-  const [selectedMaterial, setSelectedMaterial] = useState('');
-
-  function handleMaterialChange(event) {
-    setSelectedMaterial(event.target.value);
-  }
-  // console.log("selected: "+selectedMaterial)
-  function renderMaterialOptions() {
-    if (PRODUCT_INFOR[_productId].material.length !== 1) {
-      return PRODUCT_INFOR[_productId].material.map((product) => {
-        return (
-          <div className='material-option-box' htmlFor={product[0]}>
-            <input 
-                  className='material-option'
-                  type='radio' 
-                  id={product[0]} 
-                  name='material' 
-                  value={product[0]} 
-                  checked={selectedMaterial === product[0]}
-                  onChange={handleMaterialChange}
-              /> 
-            <label htmlFor={product[0]}>{product[0]}</label>
-          </div>
-        );
-      });
-    } else {
-      return (
-        <>
-          <p>Sản phẩm này không có lựa chọn chất liệu</p>
-        </>
-      );
-    }
-  }
-
-  function renderEffectOptions(){
-    return PRODUCT_INFOR[_productId].material.map((product) => {
-      if (product[0]===selectedMaterial) {
-        // console.log(product[0])
-        if(product.length>=2){
-          // console.log(product.length)
-          const effect_list= product.slice(1)
-          return effect_list.map((effect)=>{
-            return(
-              <div className='effect-option-box'>
-                <input 
-                  className='effect-option'
-                  type='radio' 
-                  id={effect} 
-                  name='effect' 
-                  value={effect} 
-                /> 
-                <label htmlFor={effect}>{effect}</label>
-              </div>
-            )
-          })
-        }else{
-          return (
-            <>
-              <p className='non-effect'>Không có hiệu ứng cho chất liệu này </p>
-            </>
-          )
-        }
-      }
-
-    })
-  }
-
-  function renderSizeOptions(){
-    return PRODUCT_INFOR[_productId].size.map((size)=>{
-      return(
-        <div className='size-option-box'>
-          <input 
-                  className='size-option'
-                  type='radio' 
-                  id={size} 
-                  name='size' 
-                  value={size} 
-                  
-              /> 
-          <label htmlFor={size}>{size}</label>
-        </div>
-      )
-    })
-  }
-
-  // console.log(PRODUCT_INFOR[_productId].material[0][0])
-  return(
-    <div className='image-editor'>
-      {/* Show image edittor 
-          It include 2 component: image-editor-component and show-image-comonent
-      */}
-      <div className='images-editor-component'> {/** Include tool-bar and preview-box */}
-        <div className='tool-bar'>{/** Include tools are declared in object named tools  */}
-          <p className='tools-text'>Thanh công cụ:</p>
-          <div className='tools'>
-            {tools.map((tool,index) => {
-              return(
-                <ToolBtn 
-                  key = {index}
-                  tool_name= {tool.name}
-                  tool_icon= {tool.icon}
-                />
-              )
-            })}
-          </div>
-          
-          <hr className='line'></hr>
-          <div className='love'> 
-            <p className='love-amount-text'>100</p>
-            <BsBookmarkHeart className='love-icon'/>
-          </div>
-          <div className='change-quantity-card'>
-            <p className='amount-text'>Số lượng: </p>
-            <div className='quantity-show'>
-              
-              <input type='text' className='quantity' 
-                      name='quantity-name' 
-                      value={_files.length === 1
-                        ?(_files[0].url === ""?"":quantityTyping)
-                        :( _files.length > 1
-                          ? quantityTyping
-                          : "")
-                        }
-                      onChange={(e)=>setQuantity(e.target.value)}
-                      disabled={_files.length === 1
-                                ?_files[0].url === ""
-                                : _files.length > 1
-                                  ? false
-                                  : true
-                      }
-              />
-              <div className='change-quantity'>
-                <button className='increase' onClick={increaseQuan} disabled={_files.length===1&&_files[0].url===""?true:false}>
-                  <IoIosArrowForward className='icon'/>
-                </button>
-                <button className='decrease' onClick={decreaseQuan} disabled={quantityTyping<=1?true:false}>
-                  <IoIosArrowForward className='icon'/>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='preview-box'>
-          
-          <div className='switch-img-tool'>
-
-            <button className='previous-img' onClick={prevImgIndex} disabled={imgIndex[0].current<=0}>
-              <IoIosArrowForward/>
-            </button>
-            <p className='img-index-text'>
-              Đang chỉnh sửa ảnh số: {_files.length>=1 && _files[0].url!==""?imgIndex[0].current+1:""}
-            </p>
-            <button className='next-img' onClick={nextImgIndex} disabled={imgIndex[0].current>=_files.length-1}>
-              <IoIosArrowForward/>
-            </button>
-
-          </div>
-
-          <div className='preview-zone'>
-            <div className='current-img'>
-              
-              {_files.length>0 && 
-                <img src={_files[imgIndex[0].current].url} alt={_files[imgIndex[0].current].name}></img>                
-              }
-            </div>
-          </div>
-          <button className='confirm-changing-btn' onClick={changeQuantity} disabled={changedCheck?false:true}> 
-            XONG
-          </button>
-        </div>
-        <div className='product-option'>
-            <div className='product-marterial'>
-              <p className='material-title'> Các loại chất liệu</p>
-              {renderMaterialOptions()}
-            </div>
-
-            <div className='product-effect'>
-              <p className='effect-title'> Các hiệu ứng</p>
-              {renderEffectOptions()}
-            </div>
-
-            <div className='product-size'>
-              <p className='product-title'> Kích thước</p>
-              {renderSizeOptions()}
-            </div>
-        </div>
-      </div>
-
-      <div className='show-image-component'>
-        <div className='show-img-tools'>
-          <div className='show-img-text'>
-            Số lượng ảnh: {_files.length === 1
-                                ?(_files[0].url === ""?0:1)
-                                : _files.length > 1? _files.length: 0
-                          }
-          </div>
-          <div className='show-img-tool'>
-            <button className='delete' 
-                    onClick={deleteImage}
-                    disabled={_files.length === 1
-                                ?_files[0].url === ""
-                                : _files.length > 1
-                                  ? false
-                                  : true
-                      }>
-              <FaTrashAlt/>
-              <p>Xóa</p>
-            </button>
-            <button className='multiple-choice' 
-                    onClick={handleSetMultiChoice}
-                    disabled={_files.length === 1
-                      ?_files[0].url === ""
-                      : _files.length > 1
-                        ? false
-                        : true
-                    }
-            >
-              Chọn nhiều
-            </button>
-          </div>
-        </div>
-        <div className='show-img-box' 
-          style={_files.length>0 && _files[0].url!==""?{
-            height:_files.length<=15?(
-              Math.ceil(_files.length/5)*15.625+"em"):(50+"em")
-            }:{
-            height:0+"em"
-            }
-          }
-        >
-          {/* {_files.length} */}
-          {
-            _files.length>0 && _files[0].url!==""&&
-            _files.map((file,index)=>{
-              return(
-                <div className='image-box' id={file.index} onClick={()=>setCurrentImg(index,checkMultiChoice)}>
-                  <div className='frame'>
-                    <div className='check-box' style={checkMultiChoice?{}:{display: "none"}}>
-                      {_files[index].accessState===true?
-                        <AiFillCheckCircle id="checked"/>:
-                        <AiOutlineCheckCircle id="uncheck"/>
-                      }
-                    </div>
-                    <img 
-                      className='display-uploaded-img' 
-                      key={index} 
-                      src={file.url} 
-                      alt={file.name} 
-                    />
-                  </div>
-                  <div className='infor'>
-                    <p className='infor-stt'>STT: {index+1}</p>
-                    <p className='infor-quantity'>Số lượng: {file.quantity}</p>
-                  </div>
-                  {index===imgIndex[0].current&&!checkMultiChoice&&
-                    <div className='editing-signal'>
-                      <BsEyeFill/>
-                    </div>
-                  
-                  }
-                  
-                </div>
-              )
-              
-            })
-          }
-        </div>
-
-        <div className='show-img-bottom-bar'>
-          <textarea className='user-note' 
-                    placeholder='Ghi chú thêm ...'
-                    disabled={_files.length === 1
-                      ?_files[0].url === ""
-                      : _files.length > 1
-                        ? false
-                        : true
-                  }
-                    ></textarea>
-          <div className='let-order'>
-            <Link 
-              className='add-to-cart' 
-              onClick={()=>handleSetCart()}
-              to={                
-                isLoggedIn
-                ? _files.length === 1
-                  ? _files[0].url === "" ? "" : "../orderConfirmation"
-                  : _files.length > 1 ? "../orderConfirmation" : ""
-                : "../login"
-              }
-            >
-                    Thêm vào giỏ hàng
-            </Link>
-            <Link   
-              className='add-to-order'
-              onClick={() => _handleSendOrderInfor()} 
-              to={
-                isLoggedIn
-                  ? _files.length === 1
-                    ? _files[0].url === "" ? "" : "../orderConfirmation"
-                    : _files.length > 1 ? "../orderConfirmation" : ""
-                  : "../login"
-              }
-            >
-                    Bắt đầu đặt hàng
-            </Link>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  )
 };
 
-function Product({orderData,onOrderData}) {
 
-  const [files,setFiles] = useState([
-    {
-      index:1,
-      url:"",
-      quantity:1,
-      accessState:false
-    }
-  ]);
+const printArea={
+  img: 
+  ['../img/example_printing_area_v1.jpg',
+    '../img/example_printing_area_v2.jpg']
+}
 
-  const _handleSetFiles=(newFiles)=>{
-    // console.log(newFiles);
-    setFiles([...files, ...newFiles]);
+const questionSet = [
+  {
+    ques: "Thẻ nhựa hay PVC có những ưu điểm gì?",
+    ans: "Thẻ nhựa hay còn gọi là PVC là loại thẻ được làm từ nhựa, rất được ưa chuộng vì tính tiện dụng, độ bền cao và giá thành rẻ. Thay vì dùng thẻ giấy có giá in đắt nhưng không bền, người ta thường chuyển sang in thẻ nhựa để sử dụng thuận tiện hơn."
+  },
+  {
+    ques: "Có những loại thẻ nào được sản xuất từ chất liệu giấy?",
+    ans: "Có hai loại thẻ được làm từ chất liệu giấy là Card Giấy C300 và Card Cứng 4k. Card Giấy C300 có độ bền tương đối và giá thành phải chăng, trong khi Card Cứng 4k có độ cứng cao và chất lượng in ấn tốt."
+  },
+  {
+    ques: "Thẻ nhựa PVC có những ưu điểm gì?",
+    ans: "Card Nhựa PVC được làm từ chất liệu nhựa PVC cao cấp, có độ bền cao, chống nước và chất lượng in ấn sắc nét. Thẻ này đảm bảo khả năng sử dụng lâu dài và chịu được các điều kiện môi trường khác nhau."
+  },
+  {
+    ques: "Thẻ Polar có đặc điểm gì?",
+    ans: "Card Polar là loại thẻ có lớp phủ bề mặt bóng mờ, mang lại vẻ sang trọng và chuyên nghiệp cho các loại thẻ cao cấp."
+  },
+  {
+    ques: "Có những hiệu ứng nào có thể được áp dụng cho thẻ?",
+    ans: "Có nhiều hiệu ứng được áp dụng cho thẻ bao gồm bóng, mờ, hologram, kim tuyến, lụa và nhám. Mỗi hiệu ứng đều tạo ra vẻ ngoài độc đáo và thu hút sự chú ý cho thẻ."
+  },
+  {
+    ques: "Có những dịch vụ giao hàng nào được cung cấp?",
+    ans: "Công ty chúng tôi cung cấp dịch vụ giao hàng nhanh chóng và tin cậy. Chúng tôi đảm bảo sản phẩm được vận chuyển an toàn và đúng hẹn để đáp ứng nhu cầu của khách hàng."
+  },
+  {
+    ques: "Có thể tái chế thẻ nhựa PVC được không?",
+    ans: "Thẻ nhựa PVC không dễ tái chế do chất liệu nhựa cao cấp được sử dụng. Tuy nhiên, chúng có độ bền cao và có thể sử dụng trong thời gian dài, giúp giảm lượng thẻ giấy không cần thiết."
+  },
+  {
+    ques: "Có thể sử dụng thẻ giấy trong thời gian ngắn không?",
+    ans: "Card Giấy C300 là loại thẻ giấy phù hợp cho việc sử dụng tạm thời hoặc cần tái chế sau khi sử dụng. Chúng có giá thành phải chăng và dễ dàng tái chế."
   }
+];
 
-  const _handleUpdateFile = (index, attribute, value) => {
-    setFiles(prevFiles => {
-      // make a copy of the previous files array
-      const updatedFiles = [...prevFiles];
-      // update the attribute of the file at the given index
-      updatedFiles[index] = { ...updatedFiles[index], [attribute]: value };
-      // return the updated files array
-      return updatedFiles;
-    });
-  };
-
-  const _handleDeleteFiles = (index) => {
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
+const relationProducts = [
+  {
+    productName: "Postcard",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Photostrip giấy C300",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Photobook (Sách Ảnh)",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Khung ảnh để bàn",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Khung Treo Tường",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Lịch Để bàn",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Sổ tay",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Sticker",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Poster",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
+  },
+  {
+    productName: "Ảnh thẻ",
+    price: `${(Math.random() * (2.0 - 0.5) + 0.5).toFixed(1)} k/cái`,
+    love: `${(Math.random() * (3.0 - 0.5) + 0.5).toFixed(1)} k`
   }
+];
 
-  const _handleDeleteFilesAccessed = () => {
-    
-    let accessCounter=0;
-    files.map(file=>{
-      if(file.accessState===true){
-        ++accessCounter;
+const contactInfor=[
+  {
+    avt:'https://via.placeholder.com/300x300',
+    name:"Hà Đức Thắng",
+    phone:"0123456789",
+    email:"tzirw@example.com",
+  },
+  {
+    avt:'https://via.placeholder.com/300x300',
+    name:"Nguyễn Thị Hưng",
+    phone:"0123456789",
+    email:"tzirw@example.com",
+  },
+]
+
+const product_preview={
+  frames:[
+      'NO8vzqREokE',
+      '../img/imgs_preview_banner/pic_1.jpg',
+      '../img/imgs_preview_banner/pic_6.jpg',
+      '../img/imgs_preview_banner/pic_7.jpg',
+      '../img/imgs_preview_banner/pic_8.jpg',
+      '../img/imgs_preview_banner/pic_9.jpg',
+      '../img/imgs_preview_banner/pic_10.jpg',
+  ],
+  thumbnail:[
+      '../img/imgs_preview_banner/pic_3.jpg',
+      '../img/imgs_preview_banner/pic_1.jpg',
+      '../img/imgs_preview_banner/pic_6.jpg',
+      '../img/imgs_preview_banner/pic_7.jpg',
+      '../img/imgs_preview_banner/pic_8.jpg',
+      '../img/imgs_preview_banner/pic_9.jpg',
+      '../img/imgs_preview_banner/pic_10.jpg',
+  ]
+}
+
+const product_preview_Sticker={
+  frames:[
+      'NO8vzqREokE',
+      '../img/imgs_preview_banner/pic_11.jpg',
+      '../img/imgs_preview_banner/pic_12.jpg',
+      '../img/imgs_preview_banner/pic_13.jpg',
+      '../img/imgs_preview_banner/pic_14.jpg',
+      '../img/imgs_preview_banner/pic_15.jpg',
+      '../img/imgs_preview_banner/pic_16.jpg',
+  ],
+  thumbnail:[
+      '../img/imgs_preview_banner/pic_11.jpg',
+      '../img/imgs_preview_banner/pic_11.jpg',
+      '../img/imgs_preview_banner/pic_12.jpg',
+      '../img/imgs_preview_banner/pic_13.jpg',
+      '../img/imgs_preview_banner/pic_14.jpg',
+      '../img/imgs_preview_banner/pic_15.jpg',
+      '../img/imgs_preview_banner/pic_16.jpg',
+  ]
+}
+
+
+function PostRender({product_infor}){
+  // const test='abcdef <a>haha</a> ajas'
+
+  const [products, setProducts] = useState()
+  useEffect(() => {
+    fetch('http://localhost:3001/api/v1/product/all')
+      .then(response => response.json())
+      .then(data => setProducts(data))
+      .catch(error => console.error(error));
+  }, []);
+  // console.log(product_infor.name)
+  return (
+    <div className='post-render'>
+      
+      <ProductPreview product_preview={product_infor?.img}/>
+      <BasicParamsRender product_infor={product_infor}/>
+      {/* <OrderInfor contactInfor={contactInfor} /> */}
+      <ProductOptionRender productOptions={productOptions}/>
+      <ProductIntroduce productInfor={productInforSticker}/>
+      {
+        product_infor?.category==="Card bo góc"&&
+
+        <PrintAre printArea={printArea}/>
       }
-    })
+      {/* <Question questionSet={questionSet}/> */}
+      <RelationProduct relationProducts={products?.products} currentProduct={product_infor}/>
+      {/* <OrderInfor contactInfor={contactInfor}/> */}
+      {/* <p>{test}</p> */}
+    </div>
+  )
+}
 
-    if(accessCounter===files.length){
-      setFiles([{      
-        index:1,
-        url:"",
-        quantity:1,
-        accessState:false
-      }])
-    }else{
+function Product() {
 
-      const updatedFiles = files.filter(file => !file.accessState);
-      setFiles(updatedFiles);
-    }
-  };
 
   const [typeSprintListTrigger,setTypeSprintListTrigger]=useState(false);
   
@@ -916,81 +465,38 @@ function Product({orderData,onOrderData}) {
     setTypeSprintListTrigger(!typeSprintListTrigger)
   }
 
-  //Get products list
-  //Get product name to render side column
-  const [productList,setProductList]=useState()
+  // //Get products list
+  // //Get product name to render side column
+  // const [productList,setProductList]=useState()
   
-  useEffect(() => {
-      fetch('http://localhost:3001/api/v1/client/home/productList')
-        .then(response => response.json())
-        .then(data => setProductList(data))
-        .catch(error => console.error(error));
-    }, []);
+  // useEffect(() => {
+  //     fetch('http://localhost:3001/api/v1/client/home/productList')
+  //       .then(response => response.json())
+  //       .then(data => setProductList(data))
+  //       .catch(error => console.error(error));
+  //   }, []);
 
-  //Get product from product_id
+  // //Get product from product_id
   const [product,setProduct]=useState()
-  
+  const currentURL = window.location.href;
+  const product_id = currentURL.match(/productId=(\d+)/)[1];
   useEffect(() => {
-      fetch('http://localhost:3001/api/v1/client/home/productList?id=')
+      fetch(`http://localhost:3001/api/v1/product/get?productId=${product_id}`)
         .then(response => response.json())
         .then(data => setProduct(data))
         .catch(error => console.error(error));
   }, []);
 
+  // console.log(product);
+
   return (
     <>
       <div className='main'>
-        <div className='side-column'>
-          <div className='type-sprint-big-screen'>
-            <h2>Các loại in ấn khác</h2>
-            <ul className='typesprint'>
-              <li><Link to="/products"> Postcard</Link></li>
-              <li><Link to="/products"> Photostrip giấy C300</Link></li>
-              <li><Link to="/products"> Photobook (Sách Ảnh)</Link></li>
-              <li><Link to="/products"> Khung ảnh để bàn</Link></li>
-              <li><Link to="/products"> Khung Treo Tường</Link></li>
-              <li><Link to="/products"> Lịch Để bàn</Link></li>
-              <li><Link to="/products"> Sổ tay</Link></li>
-              <li><Link to="/products"> Sticker</Link></li>
-              <li><Link to="/products"> Poster</Link></li>
-              <li><Link to="/products"> Ảnh thẻ</Link></li>
-            </ul>
-          </div>
-
-          <div className='type-sprint-small-screen'>
-            <div className='type-sprint-title'
-              onClick={_handleSetTypeSprintListTrigger}
-            > <FaListAlt/> <h2>Các loại in ấn khác </h2> 
-            </div>
-            <ul 
-              className='typesprint'
-              style={!typeSprintListTrigger?{display:"none"}:{}}
-            >
-              <li><Link to="/products"> Postcard</Link></li>
-              <li><Link to="/products"> Photostrip giấy C300</Link></li>
-              <li><Link to="/products"> Photobook (Sách Ảnh)</Link></li>
-              <li><Link to="/products"> Khung ảnh để bàn</Link></li>
-              <li><Link to="/products"> Khung Treo Tường</Link></li>
-              <li><Link to="/products"> Lịch Để bàn</Link></li>
-              <li><Link to="/products"> Sổ tay</Link></li>
-              <li><Link to="/products"> Sticker</Link></li>
-              <li><Link to="/products"> Poster</Link></li>
-              <li><Link to="/products"> Ảnh thẻ</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className='content'>
-            <img className='banner-product' src="https://via.placeholder.com/700x300" alt=""/>
-            <ClickHereToUpLoadImage _files={files} _handleSetFiles={_handleSetFiles}/>
-            <ImageEditor 
-              _orderData={orderData}
-              _productId={productId[0]}
-              _files={files} 
-              _handleUpdateFile={_handleUpdateFile} 
-              _handleDeleteFiles={_handleDeleteFiles}
-              _handleDeleteFilesAccessed={_handleDeleteFilesAccessed}
-              _handleSendOrderInfor={onOrderData}
-            />
+        <div className='product-content'>
+          {product!==null&&
+          
+            <PostRender product_infor={product?.product}/>
+          }
         </div>
         
       </div>

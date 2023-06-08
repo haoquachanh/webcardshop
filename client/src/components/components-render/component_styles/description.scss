@@ -1,0 +1,40 @@
+$subtitle-font-size: 1.1em;
+$content-font-size: 0.9em;
+
+$title-color: #6E5AA7;
+
+.des-container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    .des-title{
+        width: 100%;
+        p{
+            color: $title-color;
+            font-size: $subtitle-font-size;
+        }
+    }
+    .des-content{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap:3px;
+        // justify-content: flex-end;
+        p{
+            width: 100%;
+            font-size: $content-font-size;
+        }
+    }
+    .des-img{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap:10px;
+        img{
+            width: 100%;
+            border-radius: 10px;
+        }
+    }
+}

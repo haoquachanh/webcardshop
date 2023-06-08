@@ -27,3 +27,9 @@ export const notAuth = (err, res, isExpired) => {
         mes: error.message
     })
 }
+export const Homeroute = (err, res) => {
+    return res.status(200).json({
+        err: 0,
+        mes: "server running"
+    })
+}

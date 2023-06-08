@@ -4,46 +4,59 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
-      
-      User.belongsTo(models.Role, { foreignKey: 'roleId' , as: 'role'});
-      User.hasMany(models.Comment, { foreignKey: 'userId', as: 'comment' });
-      User.hasMany(models.Order, { foreignKey: 'userId', as: 'order' });
-      User.belongsTo(models.Membership, { foreignKey: 'memberId', as: 'membership' });
+      // Define associations here
+      User.hasMany(models.Order, { foreignKey: 'userId'});
+      User.belongsTo(models.Role, { foreignKey: 'roleId'});
     }
   }
+
   User.init(
     {
-      userId: {
+      id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      password: DataTypes.STRING,
-      email: DataTypes.STRING,
-      avt: DataTypes.STRING,
-      address: DataTypes.STRING,
-      name: DataTypes.STRING,
-      phone: DataTypes.STRING(12),
-      coins: DataTypes.STRING,
-      status: DataTypes.STRING,
-      birth: DataTypes.DATEONLY,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      fullname: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      avt: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      birth: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       roleId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 2,
-        type: DataTypes.INTEGER.UNSIGNED
-      },
-      memberId: {
-        allowNull: false,
-        defaultValue: 4,
-        type: DataTypes.INTEGER.UNSIGNED 
-      },
-
+        references: {
+          model: 'Role',
+          key: 'id',
+        },
+      }
     },
     {
       sequelize,
       modelName: 'User',
-      tableName: 'Users', // Add this line to match the table name
+      tableName: 'users',
     }
   );
   return User;

@@ -1,0 +1,88 @@
+$title-font-size: 1.2em;
+$subtitle-font-size: 1.1em;
+$content-font-size: 0.9em;
+
+$title-color: #6E5AA7;
+
+$background-color-component: rgb(247, 247, 247);
+$border-color:rgba(110, 90, 167, 0.5);
+
+
+.get-input-item{
+    width: 100%;
+    display: flex;
+    .get-input-content{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap:10px;
+        .title{
+            width: 100%;
+            p{
+
+                font-size: $subtitle-font-size;
+                font-weight: 600;
+                color: $title-color;
+            }
+        }
+        .input-box{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap:10px;
+            input{
+                background-color: $background-color-component;
+                width: 100%;
+                padding: 8px;
+                font-size: $content-font-size;
+                border: none; /* Remove the default border */
+                border-bottom: 1px solid $border-color; /* Add bottom border */
+                outline: none; /* Remove the outline when the input is focused */
+                &:focus{
+                   background-color: #fff;
+                }
+            }
+            .option{
+                // width: 20%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-content: center;
+                padding: 5px;
+                border-radius: 8px;
+                // align-i: center;
+                border: solid 1px $title-color;
+                font-weight: 600;
+                cursor: pointer;
+                input{
+                    width: fit-content;
+                }
+                &:hover{
+                    background-color: #cbb8ff;
+                    
+                }
+            }
+        }
+
+        .op-des{
+            width: 100%;
+            .op-des-content{
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2%;
+                p{
+                    width: 70%;
+                }
+                .img-container{
+                    width: 28%;
+                    img{
+                        width: 100%;
+                        border-radius: 8px;
+                    }
+                }
+            }
+        }
+
+    }
+}

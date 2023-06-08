@@ -1,5 +1,12 @@
 @import './config/variables.scss';
 
+$background-color-component: rgb(247, 247, 247);
+$title-font-size: 1.2em;
+$subtitle-font-size: 1.1em;
+$content-font-size: 0.9em;
+$border-color:rgba(110, 90, 167, 0.5);
+$title-color: #6E5AA7;
+$padding: 2% 20%;
 // // MOBILE VERSION
 // .page {
 //   height: 100vh;
@@ -20,144 +27,176 @@
 //   }
 // }
 
-.main-login {
-  // background-color: $secondary-color;
-  width: 70%;
-  // height: 50%;
-  margin: 0 15%;
-  padding: 5% 0;
-  position: relative;
-  // border-radius: 1em;
-  // box-shadow: 0 0.188em 1.550em rgb(156, 156, 156);
-  display: flex;
-  // flex-direction: column;
-  align-items: flex-start;
-  // justify-content: space-around;
-  justify-content: center;
-  flex-wrap: wrap;
-  @media (max-width:1025px) {
-    width: 90%;
-    margin: 0 5%;
+.main{
 
-  }
-  .welcome-text{
-    // margin: 0 auto;
+  .main-login {
     width: 100%;
-    font-size: calc(22px + 0.390625vw);
-    font-weight: bolder;
-    margin-bottom: 1em;
-    //font-style: italic;
-    text-align: center;
-  }
-  .login-container{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    .login-input-container{
-      width: 68%;
+    padding: $padding;
+    background-color: $background-color-component;
+    border-radius: 8px;
+    gap:30px;
+    @media (max-width:1025px) {
+      width: 90%;
+      margin: 0 5%;
+  
+    }
+    .welcome-text{
+      // margin: 0 auto;
+      width: 100%;
+      font-size: calc(22px + 0.390625vw);
+      font-weight: bolder;
+      margin-bottom: 1em;
+      //font-style: italic;
+      color: $title-color;
+      text-align: center;
+    }
+    .login-container{
       display: flex;
       flex-wrap: wrap;
-      @media (max-width: 850px) {
-        width: 60%;
-      }
-      @media (max-width: 600px) {
-        margin-bottom: 10px;
-        width: 100%;
-      }
-      span{
-      
-        width: 100%;
-        font-weight: bold;
-        font-size: 1.2em;
-      }
-      input{
-        width: 100%;
-        height: 2.5em;
-        border-radius: 10px;
-        text-align: left;
-        padding: 0 2%;
-      }
-      .input-error{
-        color: red;
-      }
-      .get-input{
-        width: 100%;
-      }
-    }
-
-    .login-btns{
-      width: 30%;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-end;
-      @media (max-width: 850px) {
-        width: 38%;
-      }
-      @media (max-width: 600px) {
-        width: 100%;
-      }
-      .other-login-method{
-        font-size: 1.2em;
-        font-weight: 600;
-        
-      }
-      .login-btn{
-        width: 100%;
-      }
-      button{
-        height: 2.5em;
-        border-radius: 10px;
-        font-weight: bold;
-      }
-
-      .other-way-login-btn{
+      justify-content: space-between;
+      .login-input-container{
+        width: 68%;
         display: flex;
-        width: 100%;
-        justify-content: space-between;
-        button{
-          width: 49%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap:3px;
-        }
-      }
-    }
-    .register-container{
-      width: 68%;
-      margin-top: 10px;
-
-      @media (max-width: 600px) {
-        width: 100%;
-      }
-      .reset-password{
-        font-size: calc(15px + 0.390625vw);
-        
-        text-decoration: underline;
-      }
-      .register-hint{
-        width: 100%;
-        display: flex;
-        gap:10px;
-        justify-content: flex-start;
-        gap: 10px;
-        align-content: center;
         flex-wrap: wrap;
-        .no-account-text{
-          font-size: calc(15px + 0.390625vw);
-          font-weight: 600;
+        @media (max-width: 850px) {
+          width: 60%;
         }
-        .sign-up{
+        @media (max-width: 600px) {
+          margin-bottom: 10px;
+          width: 100%;
+        }
+        span{
+        
+          font-size: $subtitle-font-size;
+          font-weight: 600;
+          color: $title-color;
+        }
+        input{
+          background-color: $background-color-component;
+          width: 100%;
+          padding: 8px;
+          font-size: $content-font-size;
+          border: none; /* Remove the default border */
+          border-bottom: 1px solid $border-color; /* Add bottom border */
+          outline: none; /* Remove the outline when the input is focused */
+          &:focus{
+             background-color: #fff;
+          }
+        }
+        .input-error{
+          color: red;
+        }
+        .get-input{
+          width: 100%;
+        }
+      }
+  
+      .login-btns{
+        width: 30%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-end;
+        @media (max-width: 850px) {
+          width: 38%;
+        }
+        @media (max-width: 600px) {
+          width: 100%;
+        }
+        .other-login-method{
+          font-size: $subtitle-font-size;
+          font-weight: 600;
+          
+        }
+        .login-btn{
+          width: 100%;
+          background-color: $title-color;
+          color: white;
+          &:hover{
+            color: #52437d;
+            background-color: #f1edfd;
+          }
+        }
+        button{
+          height: 2.5em;
+          border-radius: 5px;
+          font-weight: bold;
+          border: solid 1px $border-color;
+        }
+  
+        .other-way-login-btn{
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
           button{
-            padding: 0.1em 1em;
-            border-radius: 10px;
+            width: 49%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:3px;
+            color: white
+          }
+          .fb{
+            background-color: rgb(81, 81, 224);
+            &:hover{
+              color: rgb(81, 81, 224);
+              background-color: #f1edfd;
+            }
+          }
+          .gg{
+            background-color: rgb(225, 60, 60);
+            &:hover{
+              color: rgb(225, 60, 60);
+              background-color: #f1edfd;
+            }
+          }
+        }
+      }
+      .register-container{
+        width: 68%;
+        margin-top: 10px;
+  
+        @media (max-width: 600px) {
+          width: 100%;
+        }
+        .reset-password{
+          font-size: calc(15px + 0.390625vw);
+          
+          text-decoration: underline;
+        }
+        .register-hint{
+          width: 100%;
+          display: flex;
+          gap:10px;
+          justify-content: flex-start;
+          gap: 10px;
+          align-content: center;
+          flex-wrap: wrap;
+          .no-account-text{
             font-size: calc(15px + 0.390625vw);
-            font-weight: bold;
+            font-weight: 600;
+          }
+          .sign-up{
+            button{
+              padding: 0.1em 2em;
+              border-radius: 5px;
+              font-size: $subtitle-font-size;
+              font-weight: bold;
+              color: white;
+              background-color: $title-color;
+              border: solid 1px $border-color;
+              // transition: all 0.5ms ease-in;
+              &:hover{
+                color: #52437d;
+                background-color: #f1edfd;
+              }
+            }
           }
         }
       }
     }
+  
   }
-
 }
 

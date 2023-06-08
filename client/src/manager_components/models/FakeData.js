@@ -637,9 +637,9 @@ export const imgs={
 }
 
 export const policiesAndPromotions =[
-    'Chính sách khách hàng 1',
-    'Chính sách khách hàng 2',
-    'Chính sách khách hàng 3'
+    'Sản phẩm tiêu biểu 1',
+    'Sản phẩm tiêu biểu 2',
+    'Sản phẩm tiêu biểu 3'
 ]
 
 export const contactsFake=[

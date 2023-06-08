@@ -37,9 +37,9 @@ export default function Login(){
     }, [msg,update])
 
     const handleSubmit = async()=>{
-        // console.log(payload)
         let invalids = validate(payload)
         if (invalids === 0) {
+
             await dispatch(actions.login(payload));
         }
     }
@@ -61,7 +61,8 @@ export default function Login(){
     }
 
     return (
-        <div className="main-login">
+        <div className='main'>
+            <div className="main-login">
             <p className='welcome-text'>
                 Chào mừng bạn đến với Shop ảnh nổi 3D Lenticular!
             </p>
@@ -72,7 +73,8 @@ export default function Login(){
                     <div className='get-input'>
                         <span>Email: </span>
                         <input 
-                            type="text" value={payload.email} 
+                            name='email'
+                            type="email" value={payload.email} 
                             placeholder={invalidFields.length > 0 && invalidFields.some(i => i.name === "email") ?invalidFields.find(i => i.name === 'email')?.message:"Điền vào đây..."} 
                             onChange={(event) => setPayload(prev=>({...prev,['email']:event.target.value}))}
                             // onFocus={() => setInvalidFields([])}
@@ -82,6 +84,7 @@ export default function Login(){
                     <div className='get-input'>
                         <span>Mật khẩu: </span>
                         <input 
+                            name='password'
                             type="password" value={payload.password} 
                             placeholder={invalidFields.length > 0 && invalidFields.some(i => i.name === "password") ?invalidFields.find(i => i.name === 'password')?.message:"Điền vào đây..."}
                             onChange={(event) => setPayload(prev=>({...prev,['password']:event.target.value}))} />
@@ -94,7 +97,12 @@ export default function Login(){
                         <i>Hoặc đăng nhập bằng:</i>
                     </p>
                     <div className='other-way-login-btn'>
-                        <button className='fb'><FaFacebook/> Facebook</button>
+                        <button className='fb'>
+                            {/* <a href="http://localhost:3001/v1/api/auth/google" target="_blank" rel="noopener noreferrer"> */}
+                            <FaFacebook/> Facebook
+                            {/* </a> */}
+                            
+                        </button>
                         <button className='gg'><FaGoogle/> Google</button>
                     </div>
                 </div>
@@ -115,6 +123,8 @@ export default function Login(){
             
 
         </div>
+        </div>
+        
     )
 }
 

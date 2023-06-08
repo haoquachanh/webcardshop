@@ -33,7 +33,7 @@ export default function Register(){
     const dispatch=useDispatch()
     
     const handleSubmit = async() => {
-        console.log(registerPayload)
+        // console.log(registerPayload)
         // setUpdatePassFlag(true)
         let invalids = validate(registerPayload)
         if (invalids === 0) {
@@ -166,103 +166,106 @@ export default function Register(){
 
     // console.log(agreePoliciesFlag)
     return (
-        <div className="main-register">
-            <h1>Chào mừng bạn đến với Shop ảnh nổi 3D Lenticular!</h1>
-            <div className="register-form">
-                <label>
-                    Họ và tên:
-                    <input 
-                        type="text" 
-                        placeholder="Nguyễn Văn A" 
-                        name="fullName" required
-                        value={registerPayload.name}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['name']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                    />
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "name") && <small className='input-error' >{invalidFields.find(i => i.name === 'name')?.message}</small>}
-                </label>
-                <label>
-                    Email:
-                    <input 
-                        type="email" 
-                        placeholder="example@gmail.com" 
-                        name="email" required
-                        value={registerPayload.email}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['email']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                    />
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "email") && <small className='input-error' >{invalidFields.find(i => i.name === 'email')?.message}</small>}
-                </label>
-                <label>
-                    Số điện thoại:
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        name="phone" 
-                        placeholder="0..." required
-                        value={registerPayload.phone}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['phone']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                    />
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "phone") && <small className='input-error' >{invalidFields.find(i => i.name === 'phone')?.message}</small>}
-                </label>
-                <label>
-                    Ngày sinh:
-                    <input 
-                        type="date" 
-                        name="birthday" 
-                        required
-                        value={registerPayload.birth}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['birth']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                    />
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "birth") && <small className='input-error' >{invalidFields.find(i => i.name === 'birth')?.message}</small>}
-                </label>
-                <label className='password-input'>
-                    Mật khẩu:
-                    <input 
-                        type="password" 
-                        name="password" 
-                        value={registerPayload.password}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['password']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                        required/>
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "password") && <small className='input-error' >{invalidFields.find(i => i.name === 'password')?.message}</small>}
-                    <p className="password-notice">
-                        Vui lòng đặt mật khẩu ít nhất có 8 ký tự bao gồm ít 
-                        nhất một chữ viết hoa, một chữ thường và một chữ số. Mật khẩu cũng không gồm ký tự đặc biệt, không có khoảng trắng
-                        và không có dấu.
-                    </p>
-                    
-                    {printAlert()}
-                </label>
-                <label>
-                    Nhập lại mật khẩu:
-                    <input 
-                        type="password" 
-                        name="repassword" 
-                        value={registerPayload.retypePassword}
-                        onChange={(event)=>setRegisterPayload(prev=>({...prev,['retypePassword']:event.target.value}))}
-                        onFocus={() => setInvalidFields([])}
-                        required/>
-                    {invalidFields.length > 0 && invalidFields.some(i => i.name === "retypePassword") && <small className='input-error' >{invalidFields.find(i => i.name === 'retypePassword')?.message}</small>}
-                </label>
-                <div className='agree-policies' onClick={()=>setAgreePoliciesFelag(!agreePoliciesFlag)}>
+        <div className="main">
 
-                    <input type="checkbox" name="agreePolicies" checked={agreePoliciesFlag} required/>
-                    <label htmlFor='arragreePolicies'>
-                        Tôi đồng ý với tất cả điều khoản trong <Link to="./home">chính sách</Link> của Shop
+            <div className="main-register">
+                <h1>Chào mừng bạn đến với Shop ảnh nổi 3D Lenticular!</h1>
+                <div className="register-form">
+                    <label>
+                        Họ và tên:
+                        <input 
+                            type="text" 
+                            placeholder="Nguyễn Văn A" 
+                            name="fullName" required
+                            value={registerPayload.name}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['name']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                        />
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "name") && <small className='input-error' >{invalidFields.find(i => i.name === 'name')?.message}</small>}
                     </label>
+                    <label>
+                        Email:
+                        <input 
+                            type="email" 
+                            placeholder="example@gmail.com" 
+                            name="email" required
+                            value={registerPayload.email}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['email']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                        />
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "email") && <small className='input-error' >{invalidFields.find(i => i.name === 'email')?.message}</small>}
+                    </label>
+                    <label>
+                        Số điện thoại:
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            placeholder="0..." required
+                            value={registerPayload.phone}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['phone']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                        />
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "phone") && <small className='input-error' >{invalidFields.find(i => i.name === 'phone')?.message}</small>}
+                    </label>
+                    <label>
+                        Ngày sinh:
+                        <input 
+                            type="date" 
+                            name="birthday" 
+                            required
+                            value={registerPayload.birth}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['birth']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                        />
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "birth") && <small className='input-error' >{invalidFields.find(i => i.name === 'birth')?.message}</small>}
+                    </label>
+                    <label className='password-input'>
+                        Mật khẩu:
+                        <input 
+                            type="password" 
+                            name="password" 
+                            value={registerPayload.password}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['password']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                            required/>
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "password") && <small className='input-error' >{invalidFields.find(i => i.name === 'password')?.message}</small>}
+                        <p className="password-notice">
+                            Vui lòng đặt mật khẩu ít nhất có 8 ký tự bao gồm ít 
+                            nhất một chữ viết hoa, một chữ thường và một chữ số. Mật khẩu cũng không gồm ký tự đặc biệt, không có khoảng trắng
+                            và không có dấu.
+                        </p>
+                        
+                        {printAlert()}
+                    </label>
+                    <label>
+                        Nhập lại mật khẩu:
+                        <input 
+                            type="password" 
+                            name="repassword" 
+                            value={registerPayload.retypePassword}
+                            onChange={(event)=>setRegisterPayload(prev=>({...prev,['retypePassword']:event.target.value}))}
+                            onFocus={() => setInvalidFields([])}
+                            required/>
+                        {invalidFields.length > 0 && invalidFields.some(i => i.name === "retypePassword") && <small className='input-error' >{invalidFields.find(i => i.name === 'retypePassword')?.message}</small>}
+                    </label>
+                    <div className='agree-policies' onClick={()=>setAgreePoliciesFelag(!agreePoliciesFlag)}>
+
+                        <input type="checkbox" name="agreePolicies" checked={agreePoliciesFlag} required/>
+                        <label htmlFor='arragreePolicies'>
+                            Tôi đồng ý với tất cả điều khoản trong <i><Link to="./home">chính sách</Link></i> của Shop
+                        </label>
+                    </div>
+
+                    <button 
+                        // type="submit"
+                        onClick={handleSubmit} 
+                        style={!agreePoliciesFlag?{pointerEvents:"none"}:{}}
+                        className="login-btn">Đăng ký
+                    </button>
                 </div>
 
-                <button 
-                    // type="submit"
-                    onClick={handleSubmit} 
-                    style={!agreePoliciesFlag?{pointerEvents:"none"}:{}}
-                    className="login-btn">Đăng ký
-                </button>
             </div>
-
         </div>
     )
 }

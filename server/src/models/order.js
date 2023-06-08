@@ -5,35 +5,53 @@ module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
       // define association here
-      Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-      Order.hasMany(models.OrderItem, { foreignKey: 'orderId', as: 'orderitems' });
+      Order.hasMany(models.OrderItem, { foreignKey: 'orderId'});
+      Order.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
-  Order.init({
-    orderId: {
+Order.init({
+    id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      autoIncrement: true,
     },
-    code: DataTypes.STRING,
-    status: DataTypes.STRING,
-    sizeId: {
-      defaultValue:1,
-      allowNull: false,
-      type: DataTypes.INTEGER
+    orderCode: {
+      type: DataTypes.STRING,
+      // allowNull: false,
     },
-    totalPrice: DataTypes.STRING,
-    discount: DataTypes.STRING,
-    note: DataTypes.STRING,
-    payment: DataTypes.STRING,
-    ship: DataTypes.STRING,
     
-    nameGet: DataTypes.STRING,
-    addressGet: DataTypes.STRING,
-    phoneGet: DataTypes.STRING,
-    code: DataTypes.STRING,
-    orderDate: DataTypes.DATE,
-  }, {
+    // key
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'User',
+        key: 'id',
+      },
+    },
+    // 
+    
+    nameReceive: {
+      type: DataTypes.STRING,
+      // allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      // allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      // allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,
+      // allowNull: false,
+    },
+    
+
+  },
+  {
     sequelize,
     modelName: 'Order',
   });

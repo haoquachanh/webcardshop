@@ -1,25 +1,25 @@
 import React,{useEffect,useState} from 'react';
 //import {BiBarChartAlt2} from 'react-icons/bi'
-import { Link, useNavigate } from 'react-router-dom';
+// import { Link, useNavigate } from 'react-router-dom';
 import '../styles/home.scss'
-import { getProducts } from '../../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+// import { getProducts } from '../../store/actions';
+// import { useDispatch, useSelector } from 'react-redux';
 
 /**import icon */
 import { RiHeartsFill } from 'react-icons/ri'
-import { BsFillHeartFill } from 'react-icons/bs'
+// import { BsFillHeartFill } from 'react-icons/bs'
 import { MdDesignServices } from 'react-icons/md'
-import { IoMdPricetag } from 'react-icons/io'
 
-const images = [
-  'https://via.placeholder.com/1500x400',
-  'https://via.placeholder.com/1500x400',
-  'https://via.placeholder.com/1500x400',
-  'https://via.placeholder.com/1500x400',
-];
+import ProductPreviewBox from '../components-render/ProductPreviewBox';
+
+import { imagesSlider } from '../models/data';
+
+
+// import ImageGallery from './Cloudinary';
+
 const delay = 3000;
 
-function ImageSlideshow(slides) {
+function ImageSlideshow({slides}) {
   const [index, setIndex] = React.useState(0);
   const timeoutRef = React.useRef(null);
 
@@ -34,7 +34,7 @@ function ImageSlideshow(slides) {
     timeoutRef.current = setTimeout(
       () =>
         setIndex((prevIndex) =>
-          prevIndex === images.length - 1 ? 0 : prevIndex + 1
+          prevIndex === imagesSlider.length - 1 ? 0 : prevIndex + 1
         ),
       delay
     );
@@ -50,7 +50,7 @@ function ImageSlideshow(slides) {
         className="slideshowSlider"
         style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
       >
-        {images.map((backgroundImage, index) => (
+        {slides.map((backgroundImage, index) => (
           <img
             className='slide'
             src={backgroundImage} alt={backgroundImage}
@@ -61,7 +61,7 @@ function ImageSlideshow(slides) {
       </div>
 
       <div className="slideshowDots">
-        {images.map((_, idx) => (
+        {slides.map((_, idx) => (
           <div
             key={idx}
             className={`slideshowDot${index === idx ? " active" : ""}`}
@@ -142,15 +142,17 @@ const trendingProducts = [
   },
 ];
 
-function TrendingProductList(trendingList) {
-
+function TrendingProductList({trendingList}) {
+  const month= new Date()
   return (
-    <div>
+    <div className='trending-list-content'>
       <div className='trending-list-title'>
         <RiHeartsFill className='trending-heart-icon' />
         Top
         <p className='high-light'>Trending</p>
-        tháng 3
+        {
+          month.getMonth()
+        }
       </div>
       <div className='trending-list-container'>
 
@@ -175,9 +177,6 @@ function TrendingProductList(trendingList) {
                   <li>
                     option 1
                   </li>
-                  <li>
-                    option 1
-                  </li>
 
                 </ul>
 
@@ -193,19 +192,19 @@ function TrendingProductList(trendingList) {
 
 }
 
-function ProductLists(productList) {
+function ProductLists({productList}) {
 
-  let product_id=10
+  // let product_id=10
 
   const handleClick = (product_id) => {
-    const queryParams = { id: product_id};
+    const queryParams = { productId: product_id};
     const searchParams = new URLSearchParams(queryParams).toString();
     const url = `/product?${searchParams}`;
 
     // Redirect to the specified URL
     window.location.href = url;
   };
-
+  // console.log(productList);
   return (
     <div className='product-list-show'>
       <div className='product-list-title'>
@@ -219,38 +218,23 @@ function ProductLists(productList) {
         </div>
       </div>
       <div className='product-list'>
-        {
-          trendingProducts.map(product =>
-          (
-
-            <Link to="#" onClick={()=>handleClick(product_id)} className='product-box'>
-
-              <img className='product-img' src='\img\card.jpg' alt='card'></img>
-              <div className='product-infor'>
-                <div className='product-name'>
-                  Card bo góc
-                </div>
-                <div className='product-detail'>
-                  <div className='unit-price'>
-                    <IoMdPricetag />
-                    1 200đ/thẻ
-                  </div>
-
-                  <div className='number-of-favorites-box'>
-                    <BsFillHeartFill className='favorite-icon' />
-                    <div className='number-of-favorites'>
-                      1,2 K
-                    </div>
-
-                  </div>
-                </div>
+        {productList?.map((item, index) => {
+          if (index % 3 === 0) {
+          return (
+              <div className="row-item" key={index}>
+                  <ProductPreviewBox product={item} index={index} handleClick={() => handleClick(item.id)} />
+                  {productList[index + 1] && (
+                      <ProductPreviewBox product={productList[index + 1]} index={index + 1} handleClick={() => handleClick(productList[index + 1].id)} />
+                  )}
+                  {productList[index + 2] && (
+                      <ProductPreviewBox product={productList[index + 2]} index={index + 2} handleClick={() => handleClick(productList[index + 2].id)} />
+                  )}
+                  
               </div>
-
-            </Link>
-
-          )
-          )
-        }
+          );
+          }
+          return null;
+      })}
       </div>
 
 
@@ -260,45 +244,50 @@ function ProductLists(productList) {
 
 function Home() {
 
-  const dispatch= useDispatch()
-  const {products} = useSelector(state=> state.product)
-  useEffect(()=>{
-    dispatch(getProducts())
-  },[])
+  // const dispatch= useDispatch()
+  // const {products} = useSelector(state=> state.product)
+  // useEffect(()=>{
+  //   dispatch(getProducts())
+  // },[])
 
   //Get img slide show
-  const [slides, setSlides] = useState()
-  useEffect(() => {
-    fetch('http://localhost:3001/api/v1/client/home/slides')
-      .then(response => response.json())
-      .then(data => setSlides(data))
-      .catch(error => console.error(error));
-  }, []);
+  // const [slides, setSlides] = useState()
+  // useEffect(() => {
+  //   fetch('http://localhost:3001/api/v1/client/home/slides')
+  //     .then(response => response.json())
+  //     .then(data => setSlides(data))
+  //     .catch(error => console.error(error));
+  // }, []);
 
   //Get trending list
-  const [trendingList, setTrendingList] = useState()
+  const [products, setProducts] = useState()
   useEffect(() => {
-    fetch('http://localhost:3001/api/v1/client/home/trendingList')
+    fetch('http://localhost:3001/api/v1/product/all')
       .then(response => response.json())
-      .then(data => setTrendingList(data))
+      .then(data => setProducts(data))
       .catch(error => console.error(error));
   }, []);
-
+  // console.log(products?.products.length);
   //Get products list
-  const [productList,setProductList]=useState()
+  // const [productList,setProductList]=useState()
     
-  useEffect(() => {
-      fetch('http://localhost:3001/api/v1/client/home/productList')
-        .then(response => response.json())
-        .then(data => setProductList(data))
-        .catch(error => console.error(error));
-    }, []);
+  // useEffect(() => {
+  //     fetch('http://localhost:3001/api/v1/client/home/productList')
+  //       .then(response => response.json())
+  //       .then(data => setProductList(data))
+  //       .catch(error => console.error(error));
+  //   }, []);
   return (
     <>
-      <ImageSlideshow slides={slides}/>
+      <ImageSlideshow slides={imagesSlider}/>
       <div className="main-content">
-        <TrendingProductList trendingList={trendingList}/>
-        <ProductLists productList={products}/>
+        <TrendingProductList trendingList={trendingProducts}/>
+        {
+          products!==null&&
+          <ProductLists productList={products?.products}/>
+          // <p>{products?.products[0].name}</p>
+        }
+        {/* <ImageGallery/> */}
       </div>
     </>
   );

@@ -1,11 +1,24 @@
 @import './config/variables.scss';
 // @import '../config/mixins.scss';
 *{  
-  font-family: $font-family;
-  font-size: $font-size-base;
+  // font-family: $font-family;
+  // font-size: $font-size-base;
   text-decoration: none;
 }
 
+$title-font-size: 1.2em;
+$subtitle-font-size: 1.1em;
+$content-font-size: 0.9em;
+
+//this is variable for component
+$background-color-component: rgb(247, 247, 247);
+$padding-component: 10px;
+$border-radius-component: 8px;
+$padding-introduce_cpn: 2% 10%;
+
+$border-color:rgba(110, 90, 167, 0.5);
+
+$title-color: #6E5AA7;
   
 header {
   // position: sticky;
@@ -69,6 +82,7 @@ header {
           width: 130%;
           padding: 10% 0;
           background-color: $primary-color;
+          z-index: 1000;
           a {
             margin: 5%;
             width: 100%;
@@ -108,16 +122,19 @@ header {
         // margin-bottom: 1rem;
         display: flex;
         flex-direction: row;
+        align-items: center;
         div{
           padding: 0 0.3rem;
-          
+                    
           img {
-            max-width: 4.5em;
+            max-width: 6em;
           }
+          
           p{
+            white-space: nowrap;
             font-size: 1.8rem;
             font-weight: 800;
-            color: $logotext;
+            color: #6E5AA7;
             text-decoration: none;
           }
         }
@@ -141,17 +158,20 @@ header {
           //width: 12rem;
           display: flex;
           justify-content: space-around;
-
+          position: relative;
           padding: 1rem;
           // margin: 0 1rem;
           // border: 5px;
+          cursor: pointer;
           .icon {
             font-size: 2.2rem;            
           }
           a {
+            
             display: flex;
             color: $black-color;
-            text-decoration: none;         
+            text-decoration: none; 
+      
           }
 
           .textHeader{
@@ -168,6 +188,39 @@ header {
             border-radius: 8px;
             background-color: #8d8d8d;
           }
+          .product-list{
+            width: 70vw;
+            position: absolute;
+            top:100%;
+            z-index: 1000;
+            background-color: $background-color-component;
+            border: solid 2px $border-color;
+            box-shadow: 0 0 5px gray;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 5px;
+            // gap:2em;
+            .category-box{
+              padding: 0.5em;
+              width: 20%;
+              display: flex;
+              flex-wrap: wrap;
+              align-content: baseline;
+              gap: 5px;
+              .title{
+                width: 100%;
+                p{
+                  color: $title-color;
+                  font-size: $subtitle-font-size;
+                  font-weight: 600;
+                }
+              }
+              .product-name:hover{
+                color: $title-color;
+
+              }
+            }
+          }  
         }
       hr{
         margin: auto 0.3rem;
@@ -221,10 +274,13 @@ header {
             img {
               max-width: 4.2em;
             }
-            p{
-              padding-top: 1%;
-              font-size: 1.2em;
-              font-weight: 800;
+            .store-name{
+
+              p{
+                padding-top: 1%;
+                font-size: 1.2em;
+                font-weight: 800;
+              }
             }
           }
         }
@@ -314,7 +370,7 @@ header {
 
 /* Text Show Slider */
 .PoliciesAndPromotions{
-  height: 30px;
+  height: 50px;
   display: flex;
   align-items: center;
   background-color: #e7e7e7;
@@ -334,8 +390,8 @@ header {
 .TextSlide{
   width: 100%;
   display: inline-block;
-  font-size: 16px;
-  color: #8d8d8d;
+  font-size: 32px;
+  color: #6E5AA7;
   text-align: center;
 }
 
@@ -354,12 +410,12 @@ header {
 .containerpb{
   display: flex;
   justify-content: flex-end;
-  background-color: white;
+  background-color: #6E5AA7;
   .page-breadcrumb{
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 3rem;
+    height: 1.5rem;
     
     width: 90%;
     @include media-query(md){
@@ -371,8 +427,10 @@ header {
     // padding-left: 12.1%;
     .website-name{
       // padding-left: 1.5em;
-      font-size: 1em;
+      font-size: 1.1em;
       font-weight: bold;
+      color: white;
+      
       // width: 25%;
       // justify-content: center;
     }
@@ -380,16 +438,17 @@ header {
       display: flex;
       flex-direction: row;
       align-items: center;
-      
+      color: white;
       
       .right-arrow-breadcrumb{
         margin: 0 1.4em;
-        font-size: 1.4em;
+        font-size: 1.1em;
         display: inline-block;
       }
   
       .page-name{
-        font-size: 1em;
+        color: white;
+        font-size: 1.1em;
       }
       @include media-query(md)
       {

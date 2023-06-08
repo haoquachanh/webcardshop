@@ -1,48 +1,92 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../../connection_database');
+const { associate } = require('./user');
+
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    static associate(models) {
-      // define association here
-      Product.belongsTo(models.Size, { foreignKey: 'sizeId', as: 'size' });
-      Product.belongsTo(models.Effect, { foreignKey: 'effectId', as: 'effect' });
-      Product.belongsTo(models.Material, { foreignKey: 'materialId', as: 'material' });
-      Product.hasMany(models.Comment, { foreignKey: 'productId', as: 'comments'});
-      Product.hasMany(models.OrderItem, { foreignKey: 'productId', as: 'oderItems' });
+    static associate(models){
+
     }
   }
-  Product.init({
-    productId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: DataTypes.STRING,
-    status: DataTypes.STRING,
-    image: DataTypes.STRING,
-    price: DataTypes.STRING,
-    banner: DataTypes.STRING,
-    sizeId: {
-      defaultValue:1,
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    effectId: {
-      allowNull: false,
-      defaultValue:1,
 
-      type: DataTypes.INTEGER
+  Product.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      video: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      name2: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      color: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      colorsys: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      sides: {
+        type: DataTypes.INTEGER,
+        // allowNull: false,
+      },
+      seen: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      price: {
+        type: DataTypes.DECIMAL,
+        // allowNull: false,
+      },
+      pritech: {
+        type: DataTypes.STRING,
+      },
+      cut: {
+        type: DataTypes.INTEGER,
+      },
+      time: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      category: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      material: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      effect: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      size: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
+      img: {
+        type: DataTypes.TEXT,
+      },
     },
-    materialId: {
-      allowNull: false,
-      defaultValue:1,
-      type: DataTypes.INTEGER
-    },
-  }, {
-    sequelize,
-    modelName: 'Product',
-  });
+    {
+      timestamps: false,
+      sequelize,
+      modelName: 'Product',
+      tableName: 'products',
+    }
+  );
+
   return Product;
-};
+}

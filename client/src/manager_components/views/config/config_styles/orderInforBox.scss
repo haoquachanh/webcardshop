@@ -1,0 +1,42 @@
+.order-infor-box{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em;
+    background-color: white;
+    gap:10px;
+    .basic-infor{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .infor{
+            display: flex;
+            p{
+                white-space: nowrap;
+                color: black;
+                font-weight: 600;
+            }
+        }
+    }
+    .vertify{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap:10px;
+        button{
+            padding: 0.3em;
+        }
+        .active-btn{
+            background-color: #ffa500;
+        }
+    }
+    .order-detail{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        button{
+            padding: 0.2em;
+        }
+    }
+}

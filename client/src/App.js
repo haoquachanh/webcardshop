@@ -18,13 +18,6 @@ import Utility from './components/views/Utility';
 
 
 const App = () => {
-
-  const [orderData, setOrderData] = useState(null);
-
-  const handleOrderData = (data) => {
-    setOrderData(data);
-    // console.log("haha")
-  };
   
   return (
     <BrowserRouter>
@@ -36,21 +29,18 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/product" element={<Products 
-          orderData={orderData}
-          onOrderData={handleOrderData}/>} 
-        />
+        <Route path="/product" element={<Products/>} />
         <Route path="/account" element={<Account /> }/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/orders" element={<Order />} />
         {/* {alert(isLogined)}; */}
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/orderConfirmation" element={<OrderConfirmation orderData={orderData}/>}/>
-        <Route path='/accountVerification' element={<AccountVerification/>}/>
+        <Route path="/carts" element={<Cart />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation/>}/>
+        <Route path='/account-verification' element={<AccountVerification/>}/>
         {/* <Route path="/" element={<RenderClient />} /> */}
         <Route path='/managerHome' element={<ManagerHome/>}/>
-        <Route path='/loginForm' element={<Login/>}/>
+        <Route path='/login-form' element={<Login/>}/>
       </Routes>
       {
         window.location.pathname!=="/managerHome"&&

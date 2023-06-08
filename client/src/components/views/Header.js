@@ -8,7 +8,7 @@ import { BsBoxSeam,BsPersonCircle,BsTelephone } from 'react-icons/bs';
 import {IoIosArrowForward} from 'react-icons/io';
 import {BiLogIn,BiLogOut,BiUserPlus,BiUserPin} from 'react-icons/bi';
 import { policiesAndPromotions } from '../../manager_components/models/FakeData';
-
+import Swal from 'sweetalert2'
 
 const delay = 3000;
 
@@ -59,10 +59,67 @@ function PoliceisSlideshow() {
   );
 }
 
-function Header(isLogined, {onClick}) {
+function ProductList({productList}){
+  let groupedProducts = {};
+
+  for (let i = 0; i < productList.length; i++) {
+      let product = productList[i];
+      let category = product.category;
+      
+      if (groupedProducts[category]) {
+          groupedProducts[category].push(product);
+      } else {
+          groupedProducts[category] = [product];
+      }
+  }
+  
+  // Get the keys (categories) of groupedProducts
+  let categories = Object.keys(groupedProducts);
+
+  const handleClick = (product_id) => {
+    const queryParams = { productId: product_id};
+    const searchParams = new URLSearchParams(queryParams).toString();
+    const url = `/product?${searchParams}`;
+
+    // Redirect to the specified URL
+    window.location.href = url;
+  };
+
+  // console.log(groupedProducts)
+
+  return(
+    <div className="product-list">
+      {categories.map(category=>{
+        return(
+          <div className='category-box'>
+            <div className='title'>
+              <p>
+                {category}
+              </p>
+            </div>
+            <div className='products'>
+              {
+                groupedProducts[category].map(product=>{
+                  return(
+                    <div className='product-name' onClick={()=>handleClick(product.id)}>
+                      {product.name}
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function Header() {
 
   const handleSwitchToAccount = (user_id) => {
-    const queryParams = { "user-id": user_id};
+    // console.log(user_id)
+    const queryParams = { "userId": user_id};
     const searchParams = new URLSearchParams(queryParams).toString();
     const url = `/account?${searchParams}`;
 
@@ -70,32 +127,102 @@ function Header(isLogined, {onClick}) {
     window.location.href = url;
   };
 
+  const handleSwitchToOrder = (user_id) => {
+    const queryParams = { "userId": user_id};
+    const searchParams = new URLSearchParams(queryParams).toString();
+    const url = `/orders?${searchParams}`
+    // console.log(isLoggedIn);
+    // Redirect to the specified URL
+    window.location.href = url;
+  };
+
+  const handleSwitchToCart = (user_id) => {
+    const queryParams = { "userId": user_id};
+    const searchParams = new URLSearchParams(queryParams).toString();
+    const url = `/carts?${searchParams}`;
+
+    // Redirect to the specified URL
+    window.location.href = url;
+  };
+
+  const handleSwitchToLogin=()=>{
+    const url = `/login`;
+
+    // Redirect to the specified URL
+    window.location.href = url;
+  }
+
+  const data = JSON.parse(localStorage.getItem("persist:auth"));
+  const token = JSON.parse(data.token);
+  
+  // console.log(atob(token?.split(' ')[1].split(".")[1]))
+
+  const decodedToken = token===null?{userId:null}:JSON.parse(atob(token?.split(' ')[1].split(".")[1]));
+
   const [isDropAcc, setIsDropAcc] = useState(false);
   const handleAccBtnClick = () => {
+    if(productToggle){
+
+      setProductToggle(false)
+    }
     setIsDropAcc(!isDropAcc);
   };
+
+  const [productToggle,setProductToggle]=useState(false)
+  const handleProductListBtnClick = () => {
+    setProductToggle(!productToggle)
+    if(isDropAcc){
+      setIsDropAcc(false);
+    }
+  };
+
+  
   const dispatch = useDispatch()
   const { isLoggedIn } = useSelector(state => state.auth)
-  const { currentData} = useSelector(state => state.user)
-  // const {userName, setUserName} = useState()
+  const [ currentData,setCurrent] = useState(decodedToken)
+  useEffect(() => {
+
+    fetch(`http://localhost:3001/api/v1/user/get?userId=${decodedToken.userId}`)
+      .then(response => response.json())
+      .then(data => setCurrent({...data.userData,userId:decodedToken.userId}))
+      .catch(error => console.error(error));
+
+  }, []);
+
+  // console.log(currentData);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        isLoggedIn && dispatch(actions.getCurrent());
+      } catch (error) {
+        console.error('Error getting current user:', error);
+        // Handle the error appropriately (e.g., display an error message)
+      }
+    };
+  
+    const timeout = setTimeout(getCurrentUser, 100);
+  
+    return () => clearTimeout(timeout); // Clear the timeout on component unmount
+  
+  }, [isLoggedIn, dispatch]);
 
   const location = useLocation();
-  useEffect(()=>{
-    setTimeout(()=>{
-
-      isLoggedIn && dispatch(actions.getCurrent())
-    },100)
-    
-  },[isLoggedIn])
-
-  // console.log(currentData)
-
   useEffect(() => {
     console.log('Path changed to:', location.pathname);
   }, [location]);
 
   const page_breadcrumbs= location.pathname.split('/').filter((substring) => substring !== '');
   
+  //Lấy sản phẩm 
+  const [products, setProducts] = useState()
+  useEffect(() => {
+    fetch('http://localhost:3001/api/v1/product/all')
+      .then(response => response.json())
+      .then(data => setProducts(data.products))
+      .catch(error => console.error(error));
+  }, []);
+  // console.log(isLoggedIn);
   return (
     <>
       <header className="header">
@@ -103,7 +230,7 @@ function Header(isLogined, {onClick}) {
           <ul>
             <li><Link to="/contact"><BsTelephone/> Liên hệ hỗ trợ</Link></li>
             <li onClick={handleAccBtnClick}>
-              <a><BsPersonCircle/> {isLoggedIn?currentData.name:'Tài khoản'}</a>
+              <a><BsPersonCircle/> {isLoggedIn?currentData?.fullname:'Tài khoản'}</a>
               {isDropAcc &&
                 ( !isLoggedIn?
                   <div className='dropdownacc'>
@@ -112,7 +239,9 @@ function Header(isLogined, {onClick}) {
                   </div>
                   :
                   <div className='dropdownacc'>
-                    <Link to='#' onClick={()=>handleSwitchToAccount(currentData.userId)}> <BiUserPin/> Thông tin</Link>
+                    <Link to='#' onClick={()=>handleSwitchToAccount(currentData?.userId)}> <BiUserPin/> Thông tin tài khoản</Link>
+                    <Link to='#' onClick={()=>handleSwitchToOrder(currentData?.userId)}> <BsBoxSeam/> Đơn hàng của bạn</Link>
+                    <Link to='#' onClick={()=>handleSwitchToCart(currentData?.userId)}> <TiShoppingCart/> Giỏ hàng của bạn</Link>
                     <Link to='/' onClick={()=>{dispatch(actions.logout())}}> <BiLogOut/> Đăng xuất</Link>
                   </div>
                 )
@@ -128,9 +257,9 @@ function Header(isLogined, {onClick}) {
               <div>
                 <img src="/img/logo/logo_lentilab-01.png" alt="Company Logo" />
               </div>
-              <div>
-                <p>3D</p>
-                <p>LENTICULAR</p>
+              <div className='store-name'>
+                <p>SHOP ẢNH NỔI</p>
+                <p>3D LENTICULAR</p>
               </div>
             </div>
             </Link>
@@ -146,24 +275,28 @@ function Header(isLogined, {onClick}) {
                 </li>
               <hr></hr>
                 {/* Switching to product page*/}
-              <li>
-                <Link to="/product" className='switchingPage'>
+              <li onClick={handleProductListBtnClick}>
+                <Link to="#" className='switchingPage' >
                   <div><TiPrinter className='icon'/></div> 
                   <div className='textHeader'>Sản phẩm</div>
                 </Link>
+                {
+                  productToggle&&
+                  <ProductList productList={products}/>
+                }
               </li>
               <hr></hr>
               {/* Switching to orders page */}
-              <li>
-                <Link to="/orders" className='switchingPage'>
+              <li onClick={isLoggedIn?()=>handleSwitchToOrder(currentData?.userId):handleSwitchToLogin}>
+                <Link to="#" className='switchingPage' >
                   <div><BsBoxSeam className='icon'/> </div>
                   <div className='textHeader'> Đơn hàng</div>
                 </Link>
               </li>
               <hr></hr>
               {/* Switching to Cart page */}
-              <li>
-                <Link to="/account" className='switchingPage'>
+              <li onClick={isLoggedIn?()=>handleSwitchToCart(currentData?.userId):handleSwitchToLogin}>
+                <Link to="#" className='switchingPage' >
                 <div><TiShoppingCart className='icon'/> </div>
                 <div className='textHeader'>Giỏ hàng</div>
                 </Link>

@@ -2,7 +2,10 @@
 
 @font-face {
     font-family: 'Dosis';
-    src: url("../src/components/styles/config/fonts/Dosis-VariableFont_wght.ttf")format('truetype');
+    src: url("../src/components/styles/config/fonts/Acumin-Variable-Concept.ttf/Acumin\ Variable\ Concept.ttf")format('truetype');
+    
+    /* src: url("../src/components/styles/config/fonts/HelveticaNeue-Thin.otf")format('truetype'); */
+
   }
   
   html{
@@ -42,7 +45,7 @@
   }
   
   ::-webkit-scrollbar-thumb{
-    background-color: #8b63a8;
+    background-color: rgb(213, 213, 213);
     border-radius: 8px;
   }
   

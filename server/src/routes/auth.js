@@ -1,10 +1,3 @@
-
-
-
-// http://localhost:3001/api/v1/auth/register
-// http://localhost:3001/api/v1/auth/login
-// http://localhost:3001/api/v1/auth/google
-
 import * as Controllers from '../controllers/authController'
 import passport from 'passport'
 import express from 'express'

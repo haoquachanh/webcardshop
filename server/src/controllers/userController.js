@@ -5,11 +5,19 @@ import { interalServerError, badRequest } from "../middlewares/handle_errors"
 
 export const getCurrent = async (req, res) => {
     try {
-        const { userId } = req.user
-        console.log(req.user)
-        const response = await Services.getOne(userId)
+        // console.log(req.query);
+        const response = await Services.getOne(req.query.userId)
         return res.status(200).json(response)
 
+    } catch (error) {
+        return interalServerError(res)
+    }
+}
+
+export const updateItem=async(req,res)=>{
+    try {
+        let response = await Services.updateItem(req.query?.userId,req.body)
+        res.status(200).json(response)
     } catch (error) {
         return interalServerError(res)
     }

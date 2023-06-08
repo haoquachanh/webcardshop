@@ -1,0 +1,17 @@
+#CART  
+###
+GET  http://localhost:3001/api/v1/contact/get
+###
+DELETE   http://localhost:3001/api/v1/contact/delete?id=1
+###
+PUT  http://localhost:3001/api/v1/contact/update?id=1
+###
+POST  http://localhost:3001/api/v1/contact/create-new?id=1
+Content-Type: application/json
+
+{
+    "name":"fb",
+    "title":"fb",
+    "link": "fb.com"
+}
+   // "id": "",  //productId

@@ -1,17 +1,13 @@
+import { email } from '../helpers/joi_schema'
 import db from '../models'
 
 
-export const getOne = (userId) => new Promise(async (resolve, reject) => {
+export const getOne = (id) => new Promise(async (resolve, reject) => {
     try {
-        console.log(userId)
+        // console.log(id)
         const response = await db.User.findOne({
-            where: { userId: userId },
-            attributes: {
-                exclude: ['password', 'roleId', 'refresh_token','status']
-            }
-            // include: [
-            //     { model: db.Role, as: 'roleData', attributes: ['id', 'name', 'description'] }
-            // ]
+            where: { id: id },
+            attributes:  ['email','phone','fullname','avt','birth']
         })
         resolve({
             err: response ? 0 : 1,
@@ -23,3 +19,20 @@ export const getOne = (userId) => new Promise(async (resolve, reject) => {
     }
 })
 
+export const updateItem = async(id,updatedData) => {
+    try {
+      await db.User.update(updatedData, {where: {id: id}});
+  
+      return {
+        err: 0,
+        mes: 'User updated successfully',
+      };
+    } catch (error) {
+      return {
+        err: 1,
+        mes: 'Failed to update product',
+        error: error.message
+      };
+    }
+    
+  }
